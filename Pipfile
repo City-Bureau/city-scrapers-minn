@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-dateutil = "*"
+pytz = "*"
+requests = "*"
+scrapy = "*"
+scrapy-sentry = "*"
+scrapy-wayback-middleware = "*"
+city-scrapers-core = {extras = ["aws"], version = "*"}
+pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
+
+[dev-packages]
+freezegun = "*"
+pytest = "*"
+"flake8" = "*"
+isort = "*"
+black = "==19.10b0"
