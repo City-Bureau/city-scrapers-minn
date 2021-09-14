@@ -11,7 +11,7 @@ scrapy = "*"
 scrapy-sentry = "*"
 scrapy-wayback-middleware = "*"
 city-scrapers-core = {extras = ["aws"], version = "*"}
-pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
+
 
 [dev-packages]
 freezegun = "*"
