@@ -10,8 +10,8 @@ USER_AGENT = "City Scrapers [production mode]. Learn more and say hello at https
 
 # Configure item pipelines
 ITEM_PIPELINES = {
-    "city_scrapers_core.pipelines.S3DiffPipeline": 200,
-    # "city_scrapers_core.pipelines.AzureDiffPipeline": 200,
+    # "city_scrapers_core.pipelines.S3DiffPipeline": 200,
+    "city_scrapers_core.pipelines.AzureDiffPipeline": 200,
     # "city_scrapers_core.pipelines.GCSDiffPipeline": 200,
     "city_scrapers_core.pipelines.MeetingPipeline": 300,
     "city_scrapers_core.pipelines.OpenCivicDataPipeline": 400,
@@ -28,8 +28,8 @@ ITEM_PIPELINES = {
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 
 EXTENSIONS = {
-    # "city_scrapers_core.extensions.AzureBlobStatusExtension": 100,
-    "city_scrapers_core.extensions.S3StatusExtension": 100,
+    "city_scrapers_core.extensions.AzureBlobStatusExtension": 100,
+    # "city_scrapers_core.extensions.S3StatusExtension": 100,
     # "city_scrapers_core.extensions.GCSStatusExtension": 100,
     "scrapy_sentry.extensions.Errors": 10,
     "scrapy.extensions.closespider.CloseSpider": None,
@@ -46,22 +46,22 @@ FEED_FORMAT = "jsonlines"
 # newline-delimited JSON files made up of OCD events following the meeting schema.
 
 FEED_STORAGES = {
-    "s3": "scrapy.extensions.feedexport.S3FeedStorage",
-    # "azure": "city_scrapers_core.extensions.AzureBlobFeedStorage",
+    # "s3": "scrapy.extensions.feedexport.S3FeedStorage",
+    "azure": "city_scrapers_core.extensions.AzureBlobFeedStorage",
     # "gcs": "scrapy.extensions.feedexport.GCSFeedStorage",
 }
 
 # Uncomment credentials for whichever provider you're using
 
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-S3_BUCKET = os.getenv("S3_BUCKET")
-CITY_SCRAPERS_STATUS_CONTAINER = S3_BUCKET
+# AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+# S3_BUCKET = os.getenv("S3_BUCKET")
+# CITY_SCRAPERS_STATUS_CONTAINER = S3_BUCKET
 
-# AZURE_ACCOUNT_NAME = os.getenv("AZURE_ACCOUNT_NAME")
-# AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
-# AZURE_CONTAINER = os.getenv("AZURE_CONTAINER")
-# CITY_SCRAPERS_STATUS_CONTAINER = AZURE_CONTAINER
+AZURE_ACCOUNT_NAME = os.getenv("AZURE_ACCOUNT_NAME")
+AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
+AZURE_CONTAINER = os.getenv("AZURE_CONTAINER")
+CITY_SCRAPERS_STATUS_CONTAINER = AZURE_CONTAINER
 
 # GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 # GCS_BUCKET = os.getenv("GCS_BUCKET")
@@ -82,20 +82,20 @@ CITY_SCRAPERS_STATUS_CONTAINER = S3_BUCKET
 
 # Uncomment the FEED_URI for whichever provider you're using
 
-FEED_URI = (
-   "s3://{bucket}/%(year)s/%(month)s/%(day)s/%(hour_min)s/%(name)s.json"
-).format(
-    bucket=S3_BUCKET
-)
-
 # FEED_URI = (
-#     "azure://{account_name}:{account_key}@{container}"
-#     "/%(year)s/%(month)s/%(day)s/%(hour_min)s/%(name)s.json"
+#    "s3://{bucket}/%(year)s/%(month)s/%(day)s/%(hour_min)s/%(name)s.json"
 # ).format(
-#     account_name=AZURE_ACCOUNT_NAME,
-#     account_key=AZURE_ACCOUNT_KEY,
-#     container=AZURE_CONTAINER,
+#     bucket=S3_BUCKET
 # )
+
+FEED_URI = (
+    "azure://{account_name}:{account_key}@{container}"
+    "/%(year)s/%(month)s/%(day)s/%(hour_min)s/%(name)s.json"
+).format(
+    account_name=AZURE_ACCOUNT_NAME,
+    account_key=AZURE_ACCOUNT_KEY,
+    container=AZURE_CONTAINER,
+)
 
 # FEED_URI = (
 #    "gs://{bucket}/%(year)s/%(month)s/%(day)s/%(hour_min)s/%(name)s.json"
