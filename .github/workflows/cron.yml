@@ -36,6 +36,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install openvpn3
           echo "$OPENVPN_CONFIG" >> ~/ovpn.conf
+          sudo openvpn3 config-import --config ~/ovpn.conf
           sudo openvpn3 session-start --config ~/ovpn.conf
           sleep 120
 
