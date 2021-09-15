@@ -33,8 +33,8 @@ jobs:
           sudo wget https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub
           sudo apt-key add openvpn-repo-pkg-key.pub
           sudo wget -O /etc/apt/sources.list.d/openvpn3.list https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-focal.list
-          sudo apt update
-          sudo apt install openvpn3
+          sudo apt-get update
+          sudo apt-get install openvpn3
           echo "$OPENVPN_CONFIG" | sudo tee -a /etc/openvpn/ovpn.conf
           sudo openvpn3 session-start --config /etc/openvpn/ovpn.conf --daemon
           sleep 120
