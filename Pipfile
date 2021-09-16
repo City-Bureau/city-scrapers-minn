@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+jsonschema="3.0.2"
 python-dateutil = "*"
 pytz = "*"
 requests = "*"
