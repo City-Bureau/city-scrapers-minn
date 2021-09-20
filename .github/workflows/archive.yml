@@ -44,4 +44,5 @@ jobs:
       - name: Run scrapers
         run: |
           export PYTHONPATH=$(pwd):$PYTHONPATH
+          chmod u+r+x ./.deploy.sh
           ./.deploy.sh
