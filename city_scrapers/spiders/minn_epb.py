@@ -1,4 +1,7 @@
-from city_scrapers_core.constants import NOT_CLASSIFIED
+import json
+from datetime import datetime
+
+from city_scrapers_core.constants import COMMISSION
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
 
@@ -7,7 +10,19 @@ class MinnEpbSpider(CityScrapersSpider):
     name = "minn_epb"
     agency = "Ethical Practices Board"
     timezone = "America/Chicago"
-    start_urls = ["https://lims.minneapolismn.gov/Calendar/GetCalenderList?fromDate=Dec%2031,%202017&toDate=none&meetingType=4&committeeId=53&pageCount=10000&offsetStart=0&abbreviation=ZBA&keywords=&sortOrder=6"]
+    base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
+    start_urls = [
+        "{}?fromDate={}&toDate={}&meetingType={}&committeeId={}&pageCount={}&offsetStart=0&abbreviation=&keywords=&sortOrder={}".format(
+            base_url,
+            "Jan 31,2017",
+            "",
+            4,
+            53,
+            1000,
+            1
+        )
+    ]
+
 
     def parse(self, response):
         """
@@ -16,21 +31,27 @@ class MinnEpbSpider(CityScrapersSpider):
         Change the `_parse_title`, `_parse_start`, etc methods to fit your scraping
         needs.
         """
-        for item in response.css(".meetings"):
+        data = json.loads(response.text)
+
+        for item in data:
+
             meeting = Meeting(
-                title=self._parse_title(item),
-                description=self._parse_description(item),
+                title=str(item["CommitteeName"]),
+                description=str(item["Description"]),
                 classification=self._parse_classification(item),
                 start=self._parse_start(item),
-                end=self._parse_end(item),
-                all_day=self._parse_all_day(item),
-                time_notes=self._parse_time_notes(item),
+                end=None,
+                all_day=False,
+                time_notes="",
                 location=self._parse_location(item),
                 links=self._parse_links(item),
-                source=self.base_url,
+                source=self._parse_source(item),
             )
 
-            meeting["status"] = self._get_status(meeting)
+            if item["Cancelled"]:
+                meeting["status"] = self._get_status(meeting, text="Meeting is cancelled")
+            else:
+                meeting["status"] = self._get_status(meeting)
             meeting["id"] = self._get_id(meeting)
 
             yield meeting
@@ -45,11 +66,11 @@ class MinnEpbSpider(CityScrapersSpider):
 
     def _parse_classification(self, item):
         """Parse or generate classification from allowed options."""
-        return NOT_CLASSIFIED
+        return COMMISSION
 
     def _parse_start(self, item):
         """Parse start datetime as a naive datetime object."""
-        return None
+        return datetime.strptime(item["MeetingTime"], "%Y-%m-%dT%H:%M:%S")
 
     def _parse_end(self, item):
         """Parse end datetime as a naive datetime object. Added by pipeline if None"""
@@ -65,15 +86,23 @@ class MinnEpbSpider(CityScrapersSpider):
 
     def _parse_location(self, item):
         """Parse or generate location."""
-        return {
-            "address": "",
-            "name": "",
-        }
+        if item["Location"] != 'Online Meeting':
+            address = item["Address"]
+        else:
+            address = None
+        return {"address": address, "name": item["Location"]}
+
+    def _parse_source(self, item):
+        return "https://lims.minneapolismn.gov/IndependentBodies/IndependentBodiesMeetings/"+item["Abbreviation"]
 
     def _parse_links(self, item):
         """Parse or generate links."""
-        return [{"href": "", "title": ""}]
-
-    def _parse_source(self, response):
-        """Parse or generate source."""
-        return response.url
+        links = []
+        if "CommitteeReportDocument" in item and item["CommitteeReportDocument"]:
+            links.append(
+                {
+                    "title": "Report Document",
+                    "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/" + str(item["CommitteeReportDocumentId"]) + "/" + str(item["CommitteeReportDocument"]).replace(' ', '-'),
+                }
+            )
+        return links

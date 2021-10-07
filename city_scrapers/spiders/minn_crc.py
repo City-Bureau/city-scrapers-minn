@@ -43,7 +43,7 @@ class MinnCrcSpider(CityScrapersSpider):
                 time_notes="",
                 location=self._parse_location(item),
                 links=self._parse_links(item),
-                source=self.base_url,
+                source=self._parse_source(item),
             )
 
             if item["Cancelled"]:
@@ -70,34 +70,25 @@ class MinnCrcSpider(CityScrapersSpider):
         """Parse start datetime as a naive datetime object."""
         return datetime.strptime(item["MeetingTime"], "%Y-%m-%dT%H:%M:%S")
 
-    def _parse_end(self, item):
-        """Parse end datetime as a naive datetime object. Added by pipeline if None"""
-        return None
-
-    def _parse_time_notes(self, item):
-        """Parse any additional notes on the timing of the meeting"""
-        return ""
-
-    def _parse_all_day(self, item):
-        """Parse or generate all-day status. Defaults to False."""
-        return False
-
     def _parse_location(self, item):
         """Parse or generate location."""
-        return {
-            "address": item["Address"],
-            "name": item["Location"],
-        }
+        if item["Location"] != 'Online Meeting':
+            address = item["Address"]
+        else:
+            address = None
+        return {"address": address, "name": item["Location"]}
+
+    def _parse_source(self, item):
+        return "https://lims.minneapolismn.gov/IndependentBodies/IndependentBodiesMeetings/"+item["Abbreviation"]
 
     def _parse_links(self, item):
         """Parse or generate links."""
         links = []
-        if item['CommitteeReportDocument']:
-            urlDocument = str(item["CommitteeReportDocumentId"]) + "/" + str(item["CommitteeReportDocument"])
+        if "CommitteeReportDocument" in item and item["CommitteeReportDocument"]:
             links.append(
                 {
                     "title": "Report Document",
-                    "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/" + urlDocument,
+                    "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/" + str(item["CommitteeReportDocumentId"]) + "/" + str(item["CommitteeReportDocument"]).replace(' ', '-'),
                 }
             )
         return links

@@ -31,46 +31,12 @@ def test_title():
     assert parsed_items[0]["title"] == "Board of Estimate and Taxation"
 
 
-# def test_description():
-#     assert parsed_items[0]["description"] == "EXPECTED DESCRIPTION"
-
-
 def test_start():
     assert parsed_items[0]["start"] == datetime(2018, 1, 10, 16, 0)
 
 
-# def test_end():
-#     assert parsed_items[0]["end"] == datetime(2019, 1, 1, 0, 0)
-
-
-# def test_time_notes():
-#     assert parsed_items[0]["time_notes"] == "EXPECTED TIME NOTES"
-
-
-# def test_id():
-#     assert parsed_items[0]["id"] == "EXPECTED ID"
-
-
 def test_status():
     assert parsed_items[0]["status"] == "passed"
-
-
-# def test_location():
-#     assert parsed_items[0]["location"] == {
-#         "name": "EXPECTED NAME",
-#         "address": "EXPECTED ADDRESS"
-#     }
-
-
-# def test_source():
-#     assert parsed_items[0]["source"] == "EXPECTED URL"
-
-
-# def test_links():
-#     assert parsed_items[0]["links"] == [{
-#       "href": "EXPECTED HREF",
-#       "title": "EXPECTED TITLE"
-#     }]
 
 
 def test_classification():
@@ -80,3 +46,22 @@ def test_classification():
 # @pytest.mark.parametrize("item", parsed_items)
 def test_all_day():
     assert parsed_items[0]["all_day"] is False
+
+
+def test_location():
+    assert parsed_items[0]["location"] == {
+        "name": "Room 317, City Hall",
+        "address": "350 S. 5th St., Minneapolis, MN 55415"
+    }
+
+
+def test_source():
+    assert parsed_items[0]["source"] == "https://lims.minneapolismn.gov/IndependentBodies/IndependentBodiesMeetings/BET"
+
+
+def test_links():
+    assert parsed_items[0]["links"] == [{
+        "title": "Report Document",
+      "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/1803/BET-2018-Jan-10-agenda.pdf"
+    }]
+

@@ -22,61 +22,41 @@ parsed_items = [item for item in spider.parse(test_response)]
 freezer.stop()
 
 
-
-"""
-Uncomment below
-"""
-
 def test_title():
-    assert parsed_items[0]["title"] == "54th & Lyndale Special Service District Advisory Board"
-
-
-# def test_description():
-#     assert parsed_items[0]["description"] == "EXPECTED DESCRIPTION"
+    assert parsed_items[4]["title"] == "54th & Lyndale Special Service District Advisory Board"
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2019, 2, 28, 14, 0)
-
-
-# def test_end():
-#     assert parsed_items[0]["end"] == datetime(2019, 1, 1, 0, 0)
-
-
-# def test_time_notes():
-#     assert parsed_items[0]["time_notes"] == "EXPECTED TIME NOTES"
-
-
-# def test_id():
-#     assert parsed_items[0]["id"] == "EXPECTED ID"
+    assert parsed_items[4]["start"] == datetime(2020, 2, 27, 14, 0)
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "passed"
-
-
-# def test_location():
-#     assert parsed_items[0]["location"] == {
-#         "name": "EXPECTED NAME",
-#         "address": "EXPECTED ADDRESS"
-#     }
-
-
-# def test_source():
-#     assert parsed_items[0]["source"] == "EXPECTED URL"
-
-
-# def test_links():
-#     assert parsed_items[0]["links"] == [{
-#       "href": "EXPECTED HREF",
-#       "title": "EXPECTED TITLE"
-#     }]
+    assert parsed_items[4]["status"] == "passed"
 
 
 def test_classification():
-    assert parsed_items[0]["classification"] == "Advisory Committee"
+    assert parsed_items[4]["classification"] == "Advisory Committee"
 
 
 # @pytest.mark.parametrize("item", parsed_items)
 def test_all_day():
-    assert parsed_items[0]["all_day"] is False
+    assert parsed_items[4]["all_day"] is False
+
+
+def test_location():
+    assert parsed_items[4]["location"] == {
+        "name": "Washburn Library",
+        "address": "5244 Lyndale Ave S"
+    }
+
+
+def test_source():
+    assert parsed_items[4]["source"] == "https://lims.minneapolismn.gov/Boards/Meetings/54lyndale"
+
+
+def test_links():
+    assert parsed_items[4]["links"] == [{
+        "title": "Report Document",
+      "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/1112/54th-&-Lyndale-02272020-regular-meeting-minutes.pdf"
+    }]
+

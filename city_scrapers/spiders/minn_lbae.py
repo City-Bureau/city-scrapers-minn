@@ -1,7 +1,5 @@
 import json
 from datetime import datetime
-import re
-
 
 from city_scrapers_core.constants import ADVISORY_COMMITTEE
 from city_scrapers_core.items import Meeting

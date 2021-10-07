@@ -26,52 +26,16 @@ freezer.stop()
 Uncomment below
 """
 
-
-
 def test_title():
-    assert parsed_items[0]["title"] == "Animal Care and Control Advisory Board"
-
-
-# def test_description():
-#     assert parsed_items[0]["description"] == "EXPECTED DESCRIPTION"
+    assert parsed_items[7]["title"] == "Animal Care and Control Advisory Board"
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2018, 3, 12, 18, 0)
-
-
-# def test_end():
-#     assert parsed_items[0]["end"] == datetime(2019, 1, 1, 0, 0)
-
-
-# def test_time_notes():
-#     assert parsed_items[0]["time_notes"] == "EXPECTED TIME NOTES"
-
-
-# def test_id():
-#     assert parsed_items[0]["id"] == "EXPECTED ID"
+    assert parsed_items[8]["start"] == datetime(2020, 3, 9, 18, 0)
 
 
 def test_status():
     assert parsed_items[0]["status"] == "passed"
-
-
-# def test_location():
-#     assert parsed_items[0]["location"] == {
-#         "name": "EXPECTED NAME",
-#         "address": "EXPECTED ADDRESS"
-#     }
-
-
-# def test_source():
-#     assert parsed_items[0]["source"] == "EXPECTED URL"
-
-
-# def test_links():
-#     assert parsed_items[0]["links"] == [{
-#       "href": "EXPECTED HREF",
-#       "title": "EXPECTED TITLE"
-#     }]
 
 
 def test_classification():
@@ -81,3 +45,22 @@ def test_classification():
 # @pytest.mark.parametrize("item", parsed_items)
 def test_all_day():
     assert parsed_items[0]["all_day"] is False
+
+
+def test_location():
+    assert parsed_items[0]["location"] == {
+        "name": "Animal Care & Control",
+        "address": "212 17th Ave. N., Minneapolis, MN 55411"
+    }
+
+
+def test_source():
+    assert parsed_items[0]["source"] == "https://lims.minneapolismn.gov/Boards/Meetings/MACC"
+
+
+def test_links():
+    assert parsed_items[8]["links"] == [{
+        "title": "Report Document",
+      "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/1420/Animal-Care-and-Control-Advisory-Board-Minutes-03-09-20.pdf"
+    }]
+

@@ -1,8 +1,5 @@
 import json
 from datetime import datetime
-import re
-
-
 
 from city_scrapers_core.constants import ADVISORY_COMMITTEE
 from city_scrapers_core.items import Meeting
@@ -47,7 +44,7 @@ class MinnHmfcSpider(CityScrapersSpider):
                 time_notes="",
                 location=self._parse_location(item),
                 links=self._parse_links(item),
-                source=self.base_url,
+                source=self._parse_source(item),
             )
 
             if item["Cancelled"]:
@@ -88,20 +85,23 @@ class MinnHmfcSpider(CityScrapersSpider):
 
     def _parse_location(self, item):
         """Parse or generate location."""
-        return {
-            "address": item["Address"],
-            "name": item["Location"],
-        }
+        if item["Location"] != 'Online Meeting':
+            address = item["Address"]
+        else:
+            address = None
+        return {"address": address, "name": item["Location"]}
+
+    def _parse_source(self, item):
+        return "https://lims.minneapolismn.gov/Boards/Meetings/"+item["Abbreviation"]
 
     def _parse_links(self, item):
         """Parse or generate links."""
         links = []
-        if item['CommitteeReportDocument']:
-            urlDocument = str(item["CommitteeReportDocumentId"]) + "/" + str(item["CommitteeReportDocument"])
+        if "CommitteeReportDocument" in item and item["CommitteeReportDocument"]:
             links.append(
                 {
                     "title": "Report Document",
-                    "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/" + urlDocument,
+                    "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/" + str(item["CommitteeReportDocumentId"]) + "/" + str(item["CommitteeReportDocument"]).replace(' ', '-'),
                 }
             )
         return links
