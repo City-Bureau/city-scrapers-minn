@@ -88,8 +88,10 @@ class MinnCharCoRswSpider(CityScrapersSpider):
             address = item["Address"]
         else:
             address = None
-        return {"address": address, "name": item["Location"]}
+            if item["Location"] == 'Online Meeting' or item["Address"] == 'Online Meeting':
+                address = "Remote"
 
+        return {"address": address, "name": item["Location"]}
     def _parse_source(self, item):
         return "https://lims.minneapolismn.gov/IndependentBodies/IndependentBodiesMeetings/" + item["Abbreviation"]
 

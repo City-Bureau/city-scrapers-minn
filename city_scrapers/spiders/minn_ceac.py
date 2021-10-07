@@ -88,6 +88,9 @@ class MinnCeacSpider(CityScrapersSpider):
             address = item["Address"]
         else:
             address = None
+            if item["Location"] == 'Online Meeting' or item["Address"] == 'Online Meeting':
+                address = "Remote"
+
         return {"address": address, "name": item["Location"]}
 
     def _parse_source(self, item):
