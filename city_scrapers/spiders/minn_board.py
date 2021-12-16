@@ -15,8 +15,8 @@ class MinnBoardSpider(CityScrapersSpider):
             base_url,
             "Jan 31,2017",
             "",
-            2,
-            151,
+            0,
+            "null",
             1000,
             1
         )
