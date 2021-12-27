@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from datetime import date
 from dateutil.relativedelta import relativedelta
 from city_scrapers_core.constants import BOARD
 from city_scrapers_core.items import Meeting
@@ -11,7 +10,7 @@ class MinnHcgBocSpider(CityScrapersSpider):
     name = "minn_hcg_boc"
     agency = "Hennepin County Government "
     timezone = "America/Chicago"
-    six_months = date.today() + relativedelta(months=+6)
+    six_months = datetime.today() + relativedelta(months=+6)
 
     start_urls = ["https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/2021-10-01/six_months/none/true"]
 

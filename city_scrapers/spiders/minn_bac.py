@@ -12,10 +12,12 @@ class MinnBacSpider(CityScrapersSpider):
     agency = "Minneapolis Bicycle Advisory Committee"
     timezone = "America/Chicago"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
+    today = datetime.today()
+    fromDate = today.strftime("%B %d, %Y")
     start_urls = [
         "{}?fromDate={}&toDate={}&meetingType={}&committeeId={}&pageCount={}&offsetStart=0&abbreviation=&keywords=&sortOrder={}".format(
             base_url,
-            "Jan 31,2017",
+            fromDate,
             "",
             2,
             38,

@@ -10,10 +10,12 @@ class MinnBetSpider(CityScrapersSpider):
     agency = "Board of Estimate and Taxation"
     timezone = "America/Chicago"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
+    today = datetime.today()
+    fromDate = today.strftime("%B %d, %Y")
     start_urls = [
         "{}?fromDate={}&toDate={}&meetingType={}&committeeId={}&pageCount={}&offsetStart=0&abbreviation=&keywords=&sortOrder={}".format(
             base_url,
-            "Jan 31,2017",
+            fromDate,
             "",
             4,
             177,
