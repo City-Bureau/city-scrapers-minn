@@ -10,10 +10,11 @@ class MinnHcgBocSpider(CityScrapersSpider):
     name = "minn_hcg_boc"
     agency = "Hennepin County Government "
     timezone = "America/Chicago"
+    today = datetime.today()
+    fromDate = today.strftime("%Y-%m-%d")
+    one_month = datetime.today() + relativedelta(months=-1)
     six_months = datetime.today() + relativedelta(months=+6)
-
-    start_urls = ["https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/2021-10-01/six_months/none/true"]
-
+    start_urls = ["https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/" + str(one_month.strftime("%Y-%m-%d")) + "/" + str(six_months.strftime("%Y-%m-%d")) + "/none/true"]
 
     def parse(self, response):
         """
