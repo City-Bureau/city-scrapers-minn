@@ -8,7 +8,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class MinnAuditCoSpider(CityScrapersSpider):
     name = "minn_audit_co"
     agency = "Audit Committee"
-    timezone = "America/Chicago"
+    timezone = "America/North_Dakota/Beulah"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     today = datetime.today()
     fromDate = today.strftime("%B %d, %Y")
