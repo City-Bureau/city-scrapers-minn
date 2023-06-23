@@ -9,7 +9,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class MinnHcgBocSpider(CityScrapersSpider):
     name = "minn_hcg_boc"
     agency = "Hennepin County Government "
-    timezone = "America/Chicago"
+    timezone = "America/North_Dakota/Beulah"
     today = datetime.today()
     fromDate = today.strftime("%Y-%m-%d")
     one_month = datetime.today() + relativedelta(months=-1)
