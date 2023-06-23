@@ -9,7 +9,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class MinnMacopwdSpider(CityScrapersSpider):
     name = "minn_macopwd"
     agency = "Minneapolis Advisory Committee On People With Disabilities"
-    timezone = "America/Chicago"
+    timezone = "America/North_Dakota/Beulah"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     start_urls = [
         "{}?fromDate={}&toDate={}&meetingType={}&committeeId={}&pageCount={}&offsetStart=0&abbreviation=&keywords=&sortOrder={}".format(
