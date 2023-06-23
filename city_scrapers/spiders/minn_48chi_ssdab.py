@@ -7,7 +7,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class Minn48chiSsdabSpider(CityScrapersSpider):
     name = "minn_48chi_ssdab"
     agency = "48th & Chicago Special Service District Advisory Board"
-    timezone = "America/Chicago"
+    timezone = "America/North_Dakota/Beulah"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     today = datetime.today()
     fromDate = today.strftime("%B %d, %Y")
