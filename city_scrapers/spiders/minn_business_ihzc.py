@@ -8,7 +8,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class MinnBusinessIhzcSpider(CityScrapersSpider):
     name = "minn_business_ihzc"
     agency = "Business, Inspections, Housing & Zoning (BIHZ) Committee"
-    timezone = "America/Chicago"
+    timezone = "America/North_Dakota/Beulah"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     today = datetime.today()
     fromDate = today.strftime("%B %d, %Y")

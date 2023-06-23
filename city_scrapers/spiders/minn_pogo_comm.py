@@ -8,7 +8,7 @@ from city_scrapers_core.spiders import CityScrapersSpider
 class MinnPogoCommSpider(CityScrapersSpider):
     name = "minn_pogo_comm"
     agency = "Policy & Government Oversight (POGO) Committee"
-    timezone = "America/Chicago"
+    timezone = "America/North_Dakota/Beulah"
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     start_urls = [
         "{}?fromDate={}&toDate={}&meetingType={}&committeeId={}&pageCount={}&offsetStart=0&abbreviation=&keywords=&sortOrder={}".format(
