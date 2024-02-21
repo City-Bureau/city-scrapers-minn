@@ -1,9 +1,10 @@
 import json
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
+
 from city_scrapers_core.constants import BOARD
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
+from dateutil.relativedelta import relativedelta
 
 
 class MinnHcgBocSpider(CityScrapersSpider):
@@ -14,7 +15,13 @@ class MinnHcgBocSpider(CityScrapersSpider):
     fromDate = today.strftime("%Y-%m-%d")
     one_month = datetime.today() + relativedelta(months=-1)
     six_months = datetime.today() + relativedelta(months=+6)
-    start_urls = ["https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/" + str(one_month.strftime("%Y-%m-%d")) + "/" + str(six_months.strftime("%Y-%m-%d")) + "/none/true"]
+    start_urls = [
+        "https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/"
+        + str(one_month.strftime("%Y-%m-%d"))
+        + "/"
+        + str(six_months.strftime("%Y-%m-%d"))
+        + "/none/true"
+    ]
 
     def parse(self, response):
         """
@@ -26,7 +33,7 @@ class MinnHcgBocSpider(CityScrapersSpider):
         data = json.loads(response.text)
 
         for item in data["dtMtg"]:
-            if 'board' in str(item["MeetingType"]).lower():
+            if "board" in str(item["MeetingType"]).lower():
                 meeting = Meeting(
                     title=str(item["MeetingType"]),
                     description="",
@@ -40,8 +47,10 @@ class MinnHcgBocSpider(CityScrapersSpider):
                     source=self._parse_source(item),
                 )
 
-                if 'cancelled' in str(item["MeetingType"]).lower():
-                    meeting["status"] = self._get_status(meeting, text="Meeting is cancelled")
+                if "cancelled" in str(item["MeetingType"]).lower():
+                    meeting["status"] = self._get_status(
+                        meeting, text="Meeting is cancelled"
+                    )
                 else:
                     meeting["status"] = self._get_status(meeting)
                 meeting["id"] = self._get_id(meeting)
@@ -78,17 +87,22 @@ class MinnHcgBocSpider(CityScrapersSpider):
 
     def _parse_location(self, item):
         """Parse or generate location."""
-        if item["Location"] != 'Virtually via hennepin.us':
+        if item["Location"] != "Virtually via hennepin.us":
             address = item["Location"]
         else:
             address = None
-            if item["Location"] == 'Virtually via hennepin.us' or item["Location"] == 'Online Meeting':
+            if (
+                item["Location"] == "Virtually via hennepin.us"
+                or item["Location"] == "Online Meeting"
+            ):
                 address = "Virtually via hennepin.us"
 
-        return {"address": address, "name": 'Online Meeting'}
+        return {"address": address, "name": "Online Meeting"}
 
     def _parse_source(self, item):
-        return "https://www.hennepin.us/your-government/leadership/county-board-meetings"
+        return (
+            "https://www.hennepin.us/your-government/leadership/county-board-meetings"
+        )
 
     def _parse_links(self, item):
         """Parse or generate links."""
@@ -97,7 +111,8 @@ class MinnHcgBocSpider(CityScrapersSpider):
             links.append(
                 {
                     "title": "Agenda Document",
-                    "href": "https://hennepin.novusagenda.com/agendapublic/DisplayAgendaPDF.ashx?MeetingID=" + str(item["MeetingID"])
+                    "href": "https://hennepin.novusagenda.com/agendapublic/DisplayAgendaPDF.ashx?MeetingID="
+                    + str(item["MeetingID"]),
                 }
             )
         return links
