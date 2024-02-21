@@ -13,6 +13,7 @@ scrapy-sentry = "*"
 scrapy-wayback-middleware = "*"
 city-scrapers-core = {extras = ["azure"],version = "*"}
 pdfminer-six = "*"
+scrapy-playwright = "*"
 
 [dev-packages]
 freezegun = "*"
