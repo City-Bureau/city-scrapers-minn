@@ -111,7 +111,7 @@ class MinnHcgBocSpider(CityScrapersSpider):
             links.append(
                 {
                     "title": "Agenda Document",
-                    "href": "https://hennepin.novusagenda.com/agendapublic/DisplayAgendaPDF.ashx?MeetingID="
+                    "href": "https://hennepin.novusagenda.com/agendapublic/DisplayAgendaPDF.ashx?MeetingID="  # noqa
                     + str(item["MeetingID"]),
                 }
             )

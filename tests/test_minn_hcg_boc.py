@@ -1,17 +1,15 @@
-from datetime import date, datetime
+from datetime import datetime
 from os.path import dirname, join
 
-import pytest
-from city_scrapers_core.constants import NOT_CLASSIFIED
+import pytest  # noqa
 from city_scrapers_core.utils import file_response
-from dateutil.relativedelta import relativedelta
 from freezegun import freeze_time
 
 from city_scrapers.spiders.minn_hcg_boc import MinnHcgBocSpider
 
 test_response = file_response(
     join(dirname(__file__), "files", "minn_hcg_boc.html"),
-    url="https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/2021-10-01/2023-12-29/none/true",
+    url="https://prodboarddocsrch-hc-api.azurewebsites.net/api/Values/-1/-1/2021-10-01/2023-12-29/none/true",  # noqa
 )
 spider = MinnHcgBocSpider()
 
@@ -67,6 +65,6 @@ def test_links():
     assert parsed_items[0]["links"] == [
         {
             "title": "Agenda Document",
-            "href": "https://hennepin.novusagenda.com/agendapublic/DisplayAgendaPDF.ashx?MeetingID=1265",
+            "href": "https://hennepin.novusagenda.com/agendapublic/DisplayAgendaPDF.ashx?MeetingID=1265",  # noqa
         }
     ]
