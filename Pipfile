@@ -4,15 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-jsonschema="3.0.2"
 python-dateutil = "*"
-pytz = "*"
 requests = "*"
 scrapy = "*"
-scrapy-sentry = "*"
+scrapy-sentry-errors = "1.0.0"
 scrapy-wayback-middleware = "*"
-city-scrapers-core = {extras = ["azure"],version = "*"}
-pdfminer-six = "*"
+city-scrapers-core = {ref = "main", git = "https://github.com/City-Bureau/city-scrapers-core.git", extras = ["azure"]}
 scrapy-playwright = "*"
 
 [dev-packages]
@@ -20,4 +17,7 @@ freezegun = "*"
 pytest = "*"
 "flake8" = "*"
 isort = "*"
-black = "==19.10b0"
+black = "*"
+
+[requires]
+python_version = "3.9"
