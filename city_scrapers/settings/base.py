@@ -53,3 +53,11 @@ EXTENSIONS = {
 }
 
 CLOSESPIDER_ERRORCOUNT = 5
+
+# Playwright settings
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+DOWNLOAD_HANDLERS = {
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+}
+PLAYWRIGHT_BROWSER_TYPE = "firefox"
