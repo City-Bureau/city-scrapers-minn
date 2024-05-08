@@ -4,11 +4,10 @@ from .base import *  # noqa
 
 USER_AGENT = "City Scrapers [production mode]. Learn more and say hello at https://citybureau.org/city-scrapers"  # noqa
 
-# Configure item pipelines
 ITEM_PIPELINES = {
-    "city_scrapers_core.pipelines.AzureDiffPipeline": 300,
-    "city_scrapers_core.pipelines.MeetingPipeline": 400,
-    "city_scrapers_core.pipelines.OpenCivicDataPipeline": 500,
+    "city_scrapers_core.pipelines.AzureDiffPipeline": 200,
+    "city_scrapers_core.pipelines.MeetingPipeline": 300,
+    "city_scrapers_core.pipelines.OpenCivicDataPipeline": 400,
 }
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
@@ -26,7 +25,6 @@ FEED_EXPORTERS = {
 
 FEED_FORMAT = "jsonlines"
 
-
 FEED_STORAGES = {
     "azure": "city_scrapers_core.extensions.AzureBlobFeedStorage",
 }
@@ -34,7 +32,6 @@ FEED_STORAGES = {
 AZURE_ACCOUNT_NAME = os.getenv("AZURE_ACCOUNT_NAME")
 AZURE_ACCOUNT_KEY = os.getenv("AZURE_ACCOUNT_KEY")
 AZURE_CONTAINER = os.getenv("AZURE_CONTAINER")
-
 CITY_SCRAPERS_STATUS_CONTAINER = os.getenv("AZURE_STATUS_CONTAINER")
 
 FEED_URI = (
@@ -45,9 +42,3 @@ FEED_URI = (
     account_key=AZURE_ACCOUNT_KEY,
     container=AZURE_CONTAINER,
 )
-
-# FEED_URI = (
-#    "gs://{bucket}/%(year)s/%(month)s/%(day)s/%(hour_min)s/%(name)s.json"
-# ).format(bucket=GCS_BUCKET)
-
-FEED_PREFIX = "%Y/%m/%d"
