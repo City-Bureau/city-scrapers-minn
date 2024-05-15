@@ -29,7 +29,7 @@ class MinnCityMixinMeta(type):
 class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     timezone = "America/North_Dakota/Beulah"
     # scrape all meetings from one month ago
-    from_date = datetime.now() - timedelta(days=30) 
+    from_date = datetime.now() - timedelta(days=30)
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     to_date = ""
     links = [
