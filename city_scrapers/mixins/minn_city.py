@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import scrapy
 from city_scrapers_core.constants import BOARD, CITY_COUNCIL, COMMITTEE, NOT_CLASSIFIED
@@ -28,7 +28,8 @@ class MinnCityMixinMeta(type):
 
 class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     timezone = "America/North_Dakota/Beulah"
-    from_date = datetime.today()
+    # scrape all meetings from one month ago
+    from_date = datetime.now() - timedelta(days=30) 
     base_url = "https://lims.minneapolismn.gov/Calendar/GetCalenderList"
     to_date = ""
     links = [
