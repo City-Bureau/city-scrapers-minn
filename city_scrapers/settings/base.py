@@ -60,4 +60,14 @@ DOWNLOAD_HANDLERS = {
     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }
-PLAYWRIGHT_BROWSER_TYPE = "firefox"
+# Use Chromium instead of Firefox for better stability in CI environments
+PLAYWRIGHT_BROWSER_TYPE = "chromium"
+# Browser launch options for CI stability
+PLAYWRIGHT_LAUNCH_OPTIONS = {
+    "headless": True,
+    "args": [
+        "--no-sandbox",  # Required for CI environments
+        "--disable-dev-shm-usage",  # Prevents crashes in limited memory environments
+        "--disable-gpu",  # Disable GPU acceleration in headless mode
+    ],
+}
