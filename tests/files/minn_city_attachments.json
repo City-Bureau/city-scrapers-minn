@@ -1,0 +1,27 @@
+[
+  {
+    "id": 8946,
+    "agendaId": 5795,
+    "committeeTypeId": 2,
+    "committeeId": 42,
+    "abbreviation": "Charter",
+    "committeeName": "Charter Commission",
+    "committeeEnumName": "Charter_Commission",
+    "meetingDate": "2026-01-21T00:00:00",
+    "meetingTime": "2026-01-21T16:00:00",
+    "meetingTypeId": 2,
+    "committeeType": "Independent Committee",
+    "agendaStatus": "Committee Report Published",
+    "totalRowsCount": 134,
+    "committeeReportDocumentId": 4670,
+    "committeeReportDocument": "Charter_01212026_Committee_Report.pdf",
+    "isPdf": false,
+    "archivedData": false,
+    "agendaPdf": "",
+    "showCalendarIcon": false,
+    "markedAgendaPublished": true,
+    "importedData": false,
+    "mainVideoURL": "https://youtube.com/watch?v=qMkEuaJOks0",
+    "videoTimestamps": "{\"27\":{\"title\":\"Call to Order\",\"timeInSeconds\":15,\"files\":{\"134874\":{\"title\":\"Roll Call.\",\"timeInSeconds\":62},\"134875\":{\"title\":\"Adoption of the agenda.\",\"timeInSeconds\":101},\"134876\":{\"title\":\"Acceptance of Minutes\",\"timeInSeconds\":127},\"134877\":{\"title\":\"Chair's Report.\",\"timeInSeconds\":156}}},\"87\":{\"title\":\"Election\",\"timeInSeconds\":279,\"files\":{\"134878\":{\"title\":\"Election of 2026 Charter Commission Officers\",\"timeInSeconds\":279}}},\"6\":{\"title\":\"Discussion\",\"timeInSeconds\":620,\"files\":{\"134881\":{\"title\":\"Charter Commission 2025 Annual Report\",\"timeInSeconds\":623},\"134888\":{\"title\":\"Comparable research on municipal councils in select jurisdictions\",\"timeInSeconds\":720},\"134884\":{\"title\":\"Even-Year Municipal Elections\",\"timeInSeconds\":3031},\"134885\":{\"title\":\"Elected official salaries\",\"timeInSeconds\":3381},\"134908\":{\"title\":\"New Commissioner orientation\",\"timeInSeconds\":4192}}},\"89\":{\"title\":\"Public Comment\",\"timeInSeconds\":7314,\"files\":{\"134886\":{\"title\":\"Public Comment\",\"timeInSeconds\":7314}}}}"
+  }
+]

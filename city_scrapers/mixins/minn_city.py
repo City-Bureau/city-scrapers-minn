@@ -3,7 +3,7 @@ import urllib.parse
 from datetime import datetime, timedelta
 
 import scrapy
-from city_scrapers_core.constants import BOARD, CITY_COUNCIL, COMMITTEE, NOT_CLASSIFIED
+from city_scrapers_core.constants import BOARD, CITY_COUNCIL, COMMISSION, COMMITTEE, NOT_CLASSIFIED
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
 
@@ -247,6 +247,8 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         committee_name = item["CommitteeName"].lower()
         if "board" in committee_name:
             return BOARD
+        elif "commission" in committee_name:
+            return COMMISSION
         elif "committee" in committee_name:
             return COMMITTEE
         elif "council" in committee_name:
