@@ -1,4 +1,6 @@
-from city_scrapers_core.constants import NOT_CLASSIFIED
+from datetime import datetime
+
+from city_scrapers_core.constants import BOARD, COMMITTEE, NOT_CLASSIFIED
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import LegistarSpider
 
@@ -10,7 +12,7 @@ class MinnRamseyCountyMixinMeta(type):
     """
 
     def __init__(cls, name, bases, dct):
-        required_static_vars = ["agency", "name"]
+        required_static_vars = ["agency", "name", "dept_id", "guid"]
         missing_vars = [var for var in required_static_vars if var not in dct]
 
         if missing_vars:
@@ -24,80 +26,98 @@ class MinnRamseyCountyMixinMeta(type):
 
 class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta):
     timezone = "America/Chicago"
-    # scrape all meetings from one month ago
+    # 3 years back per project date range rules
+    since_year = datetime.now().year - 3
+    # Courthouse address shared by all bodies
+    location = {
+        "name": "Ramsey County Courthouse",
+        "address": "15 W Kellogg Blvd, Saint Paul, MN 55102",
+    }
+
     name = None
     agency = None
-    committee_id = None
-    meeting_type = None
+    dept_id = None
+    guid = None
 
-    def start_requests(self):
-        pass
+    @property
+    def start_urls(self):
+        return [
+            "https://ramseycountymn.legistar.com/DepartmentDetail.aspx"
+            f"?ID={self.dept_id}&GUID={self.guid}"
+        ]
 
-    def parse(self, response):
-        """
-        `parse` should always `yield` Meeting items.
-
-        Change the `_parse_title`, `_parse_start`, etc methods to fit your scraping
-        needs.
-        """
-        for item in response.css(".meetings"):
+    def parse_legistar(self, events):
+        """Parse Meeting items from Legistar event dicts."""
+        for item in events:
             meeting = Meeting(
-                title=self._parse_title(item),
-                description=self._parse_description(item),
-                classification=self._parse_classification(item),
+                title=self.agency,
+                description="",
+                classification=self._parse_classification(),
                 start=self._parse_start(item),
-                end=self._parse_end(item),
-                all_day=self._parse_all_day(item),
-                time_notes=self._parse_time_notes(item),
+                end=None,
+                all_day=False,
+                time_notes="",
                 location=self._parse_location(item),
                 links=self._parse_links(item),
-                source=self._parse_source(response),
+                source=self.legistar_source(item),
             )
-
             meeting["status"] = self._get_status(meeting)
             meeting["id"] = self._get_id(meeting)
-
-        yield meeting
-
-    def _parse_title(self, item):
-        """Parse or generate meeting title."""
-        return ""
-
-    def _parse_description(self, item):
-        """Parse or generate meeting description."""
-        return ""
-
-    def _parse_classification(self, item):
-        """Parse or generate classification from allowed options."""
-        return NOT_CLASSIFIED
+            yield meeting
 
     def _parse_start(self, item):
-        """Parse start datetime as a naive datetime object."""
+        """Parse start datetime from Legistar 'Date' and 'Time' columns."""
+        start_date = item.get("Date")
+        start_time = item.get("Time")
+        if start_date and start_time:
+            try:
+                return datetime.strptime(
+                    f"{start_date} {start_time}", "%m/%d/%Y %I:%M %p"
+                )
+            except ValueError:
+                pass
+        if start_date:
+            try:
+                return datetime.strptime(start_date, "%m/%d/%Y")
+            except ValueError:
+                pass
         return None
 
-    def _parse_end(self, item):
-        """Parse end datetime as a naive datetime object. Added by pipeline if None"""
-        return None
-
-    def _parse_time_notes(self, item):
-        """Parse any additional notes on the timing of the meeting"""
-        return ""
-
-    def _parse_all_day(self, item):
-        """Parse or generate all-day status. Defaults to False."""
-        return False
+    def _parse_classification(self):
+        """Derive classification from agency name."""
+        name_lower = self.agency.lower()
+        if "board" in name_lower or "authority" in name_lower:
+            return BOARD
+        if "committee" in name_lower:
+            return COMMITTEE
+        return NOT_CLASSIFIED
 
     def _parse_location(self, item):
-        """Parse or generate location."""
-        return {
-            "address": "",
-            "name": "",
-        }
+        """Parse location from Legistar row; fall back to courthouse default."""
+        loc_text = item.get("Location", "") or ""
+        if isinstance(loc_text, dict):
+            loc_text = loc_text.get("label", "")
+        loc_text = loc_text.strip()
+        if loc_text:
+            return {"name": loc_text, "address": self.location["address"]}
+        return self.location
 
     def _parse_links(self, item):
-        """Parse or generate links."""
-        return [{"href": "", "title": ""}]
-
-    def _parse_source(self, response):
-        """Parse or generate source."""
-        return response.url
+        """Collect all available document links from a Legistar event dict."""
+        links = []
+        link_keys = [
+            "Meeting Details",
+            "Agenda",
+            "Accessible Agenda",
+            "Agenda Packet",
+            "Minutes",
+            "Accessible Minutes",
+            "Video",
+        ]
+        for key in link_keys:
+            val = item.get(key)
+            if isinstance(val, dict) and val.get("url"):
+                url = val["url"]
+                if url and url != "#":
+                    links.append({"href": url, "title": key})
+        return links
