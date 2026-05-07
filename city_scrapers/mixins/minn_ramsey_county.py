@@ -39,12 +39,12 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
     dept_id = None
     guid = None
 
-    @property
-    def start_urls(self):
-        return [
+    def __init__(self, *args, **kwargs):
+        self.start_urls = [
             "https://ramseycountymn.legistar.com/DepartmentDetail.aspx"
             f"?ID={self.dept_id}&GUID={self.guid}"
         ]
+        super().__init__(*args, **kwargs)
 
     def parse_legistar(self, events):
         """Parse Meeting items from Legistar event dicts."""
