@@ -97,7 +97,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         loc_text = item.get("Location", "") or ""
         if isinstance(loc_text, dict):
             loc_text = loc_text.get("label", "")
-        loc_text = loc_text.strip()
+        loc_text = " ".join(loc_text.split())
         if loc_text:
             return {"name": loc_text, "address": self.location["address"]}
         return self.location
