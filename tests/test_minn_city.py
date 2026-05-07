@@ -4,6 +4,7 @@ from os.path import dirname, join
 
 import pytest
 from city_scrapers_core.constants import BOARD, COMMISSION
+from freezegun import freeze_time
 
 from city_scrapers.mixins.minn_city import MinnCityMixin
 
@@ -51,13 +52,13 @@ def epb_spider():
     return spider
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def attachment_json():
     with open(join(dirname(__file__), "files", "minn_city_attachments.json")) as f:
         return json.load(f)
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def calendar_json():
     with open(join(dirname(__file__), "files", "minn_city_calendar.json")) as f:
         return json.load(f)
@@ -70,64 +71,65 @@ def get_calendar_item(calendar_json, committee_id):
 
     raise AssertionError(f"No calendar item found for CommitteeId {committee_id}")
 
-def test_planning_commission_fields(planning_spider, calendar_json):
-    item = get_calendar_item(calendar_json, planning_spider.committee_id)
 
-    assert planning_spider.name == "minn_plann_co"
-    assert planning_spider.agency == "Planning Commission"
-    assert planning_spider.committee_id == 81
-    assert planning_spider.meeting_type == 4
+@freeze_time("2026-05-06")
+class TestMeetingFields:
+    def test_planning_commission_fields(self, planning_spider, calendar_json):
+        item = get_calendar_item(calendar_json, planning_spider.committee_id)
 
-    assert item["CommitteeName"] == "Planning Commission"
-    assert item["CommitteeId"] == planning_spider.committee_id
-    assert item["Cancelled"] is True
+        assert planning_spider.name == "minn_plann_co"
+        assert planning_spider.agency == "Planning Commission"
+        assert planning_spider.committee_id == 81
+        assert planning_spider.meeting_type == 4
 
-    assert planning_spider._parse_start(item) == datetime(2025, 9, 25, 16, 30)
+        assert item["CommitteeName"] == "Planning Commission"
+        assert item["CommitteeId"] == planning_spider.committee_id
+        assert item["Cancelled"] is True
 
-    assert planning_spider._parse_location(item) == {
-        "address": "250 S. 4th St., Minneapolis, MN 55415",
-        "name": "Room 350, Public Service Center",
-    }
+        assert planning_spider._parse_start(item) == datetime(2025, 9, 25, 16, 30)
 
+        assert planning_spider._parse_location(item) == {
+            "address": "250 S. 4th St., Minneapolis, MN 55415",
+            "name": "Room 350, Public Service Center",
+        }
 
-def test_charter_commission_fields(charter_spider, calendar_json):
-    item = get_calendar_item(calendar_json, charter_spider.committee_id)
+    def test_charter_commission_fields(self, charter_spider, calendar_json):
+        item = get_calendar_item(calendar_json, charter_spider.committee_id)
 
-    assert charter_spider.name == "minn_char_co"
-    assert charter_spider.agency == "Charter Commission"
-    assert charter_spider.committee_id == 42
-    assert charter_spider.meeting_type == 4
+        assert charter_spider.name == "minn_char_co"
+        assert charter_spider.agency == "Charter Commission"
+        assert charter_spider.committee_id == 42
+        assert charter_spider.meeting_type == 4
 
-    assert item["CommitteeName"] == "Charter Commission"
-    assert item["CommitteeId"] == charter_spider.committee_id
-    assert item["Cancelled"] is False
+        assert item["CommitteeName"] == "Charter Commission"
+        assert item["CommitteeId"] == charter_spider.committee_id
+        assert item["Cancelled"] is False
 
-    assert charter_spider._parse_start(item) == datetime(2026, 1, 21, 16, 0)
+        assert charter_spider._parse_start(item) == datetime(2026, 1, 21, 16, 0)
 
-    assert charter_spider._parse_location(item) == {
-        "address": "250 S 4th St, Minneapolis, MN 55415",
-        "name": "Room 350, Public Service Center",
-    }
+        assert charter_spider._parse_location(item) == {
+            "address": "250 S 4th St, Minneapolis, MN 55415",
+            "name": "Room 350, Public Service Center",
+        }
 
+    def test_ethical_practices_board_fields(self, epb_spider, calendar_json):
+        item = get_calendar_item(calendar_json, epb_spider.committee_id)
 
-def test_ethical_practices_board_fields(epb_spider, calendar_json):
-    item = get_calendar_item(calendar_json, epb_spider.committee_id)
+        assert epb_spider.name == "minn_epb"
+        assert epb_spider.agency == "Ethical Practices Board"
+        assert epb_spider.committee_id == 53
+        assert epb_spider.meeting_type == 4
 
-    assert epb_spider.name == "minn_epb"
-    assert epb_spider.agency == "Ethical Practices Board"
-    assert epb_spider.committee_id == 53
-    assert epb_spider.meeting_type == 4
+        assert item["CommitteeName"] == "Ethical Practices Board"
+        assert item["CommitteeId"] == epb_spider.committee_id
+        assert item["Cancelled"] is False
 
-    assert item["CommitteeName"] == "Ethical Practices Board"
-    assert item["CommitteeId"] == epb_spider.committee_id
-    assert item["Cancelled"] is False
+        assert epb_spider._parse_start(item) == datetime(2026, 5, 19, 15, 0)
 
-    assert epb_spider._parse_start(item) == datetime(2026, 5, 19, 15, 0)
-
-    assert epb_spider._parse_location(item) == {
-        "address": "250 S 4th St, Minneapolis, MN 55415",
-        "name": "Room 350, Public Service Center",
-    }
+        assert epb_spider._parse_location(item) == {
+            "address": "250 S 4th St, Minneapolis, MN 55415",
+            "name": "Room 350, Public Service Center",
+        }
 
 
 def test_parse_classification_from_calendar_json(
@@ -189,10 +191,7 @@ def test_charter_attachment_links_are_saved_by_meeting_date(
     assert "2026-01-21" in charter_spider._links_by_date
     assert len(charter_spider._links_by_date["2026-01-21"]) == 3
 
-    titles = [
-        link["title"]
-        for link in charter_spider._links_by_date["2026-01-21"]
-    ]
+    titles = [link["title"] for link in charter_spider._links_by_date["2026-01-21"]]
 
     assert "Video" in titles
     assert "Report/Proceedings" in titles

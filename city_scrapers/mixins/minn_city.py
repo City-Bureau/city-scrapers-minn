@@ -3,7 +3,13 @@ import urllib.parse
 from datetime import datetime, timedelta
 
 import scrapy
-from city_scrapers_core.constants import BOARD, CITY_COUNCIL, COMMISSION, COMMITTEE, NOT_CLASSIFIED
+from city_scrapers_core.constants import (
+    BOARD,
+    CITY_COUNCIL,
+    COMMISSION,
+    COMMITTEE,
+    NOT_CLASSIFIED,
+)
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import CityScrapersSpider
 
@@ -49,7 +55,7 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
             "marked_agenda_path": "Board/MarkedAgenda",
         },
     ]
-    
+
     name = None
     agency = None
     committee_id = None
@@ -94,7 +100,7 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
             "search[value]": "",
             "search[regex]": "false",
         }
-    
+
     def _request_attachment_endpoint(self, endpoint_index):
         endpoint = self.attachment_endpoints[endpoint_index]
         formdata = self._get_attachment_formdata()
@@ -102,7 +108,6 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         if self.abbreviation:
             formdata["abbreviation"] = self.abbreviation
 
-        
         url = (
             f"{self.lims_base_url}/{endpoint['path']}"
             f"?abbreviation={self.abbreviation or ''}"
@@ -116,16 +121,18 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
             method="POST",
             body=urllib.parse.urlencode(formdata),
             headers={"Content-Type": "application/x-www-form-urlencoded"},
-            meta={"playwright": True,
-                  "endpoint_index": endpoint_index,
-                  "marked_agenda_path": resolved_path},
+            meta={
+                "playwright": True,
+                "endpoint_index": endpoint_index,
+                "marked_agenda_path": resolved_path,
+            },
             callback=self._parse_attachment_endpoint,
         )
 
     def _parse_attachment_endpoint(self, response):
         json_data = response.css("pre::text").get() or response.text
         data = json.loads(json_data)
-      
+
         marked_agenda_path = response.meta["marked_agenda_path"]
 
         for item in data.get("data", []):
@@ -149,42 +156,52 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         links = []
 
         if item.get("mainVideoURL"):
-            links.append({
-                "title": "Video",
-                "href": item["mainVideoURL"],
-            })
+            links.append(
+                {
+                    "title": "Video",
+                    "href": item["mainVideoURL"],
+                }
+            )
 
-        if item.get("committeeReportDocument") and item.get("committeeReportDocumentId"):
-            links.append({
-                "title": "Report/Proceedings",
-                "href": (
-                    f"{self.lims_base_url}/Download/CommitteeReport/"
-                    f"{item['committeeReportDocumentId']}/"
-                    f"{str(item['committeeReportDocument']).replace(' ', '-')}"
-                ),
-            })
+        if item.get("committeeReportDocument") and item.get(
+            "committeeReportDocumentId"
+        ):
+            links.append(
+                {
+                    "title": "Report/Proceedings",
+                    "href": (
+                        f"{self.lims_base_url}/Download/CommitteeReport/"
+                        f"{item['committeeReportDocumentId']}/"
+                        f"{str(item['committeeReportDocument']).replace(' ', '-')}"
+                    ),
+                }
+            )
 
         if item.get("agendaPdf"):
-            links.append({
-                "title": "Agenda PDF",
-                "href": item["agendaPdf"],
-            })
+            links.append(
+                {
+                    "title": "Agenda PDF",
+                    "href": item["agendaPdf"],
+                }
+            )
 
         if (
             item.get("markedAgendaPublished")
             and item.get("agendaId")
             and item.get("abbreviation")
         ):
-            links.append({
-                "title": "Agenda",
-                "href": (
-                    f"{self.lims_base_url}/{marked_agenda_path}/"
-                    f"{item['abbreviation']}/{item['agendaId']}"
-                ),
-            })
+            links.append(
+                {
+                    "title": "Agenda",
+                    "href": (
+                        f"{self.lims_base_url}/{marked_agenda_path}/"
+                        f"{item['abbreviation']}/{item['agendaId']}"
+                    ),
+                }
+            )
 
         return links
-    
+
     def _request_primary_calendar(self):
         full_url = (
             f"{self.lims_base_url}/{self.calendar_path}"

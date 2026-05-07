@@ -1,4 +1,3 @@
-
 from city_scrapers.mixins.minn_city import MinnCityMixin
 
 spider_configs = [
@@ -11,7 +10,7 @@ spider_configs = [
         "meeting_type": 4,
         "marked_agenda_path": "MarkedAgenda",
     },
-     {
+    {
         "class_name": "MinnBacSpider",
         "name": "minn_bac",
         "agency": "Minneapolis Bicycle Advisory Committee",
