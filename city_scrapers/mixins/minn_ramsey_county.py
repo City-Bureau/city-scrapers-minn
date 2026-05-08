@@ -1,8 +1,15 @@
 from datetime import datetime
 
+import scrapy
 from city_scrapers_core.constants import BOARD, COMMITTEE, NOT_CLASSIFIED
 from city_scrapers_core.items import Meeting
 from city_scrapers_core.spiders import LegistarSpider
+
+# Cookie that sets the date filter to All Years on Ramsey County Legistar pages
+_YEAR_COOKIE = (
+    "Setting-785-Calendar Year=All Years; "
+    "Setting-785-ASP.departmentdetail_aspx.Time.SelectedValue=All"
+)
 
 
 class MinnRamseyCountyMixinMeta(type):
@@ -26,8 +33,6 @@ class MinnRamseyCountyMixinMeta(type):
 
 class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta):
     timezone = "America/Chicago"
-    # 3 years back per project date range rules
-    since_year = datetime.now().year - 3
     # Courthouse address shared by all bodies
     location = {
         "name": "Ramsey County Courthouse",
@@ -45,10 +50,32 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
             f"?ID={self.dept_id}&GUID={self.guid}"
         ]
         super().__init__(*args, **kwargs)
+        # Override after super().__init__() which resets since_year to year - 1
+        self.since_year = datetime.now().year - 3
+
+    def start_requests(self):
+        """Send All Years cookie to bypass the default This Month date filter."""
+        for url in self.start_urls:
+            yield scrapy.Request(
+                url,
+                headers={"Cookie": _YEAR_COOKIE},
+                callback=self.parse,
+            )
+
+    def parse(self, response):
+        """Parse all events directly from the GET response.
+
+        DepartmentDetail.aspx returns all-years data on the initial GET when
+        the All Years cookie is set, so no year-iteration POSTs are needed.
+        """
+        yield from self._parse_legistar_events_page(response)
 
     def parse_legistar(self, events):
         """Parse Meeting items from Legistar event dicts."""
         for item in events:
+            start = self._parse_start(item)
+            if start and start.year < self.since_year:
+                continue
             meeting = Meeting(
                 title=self.agency,
                 description="",

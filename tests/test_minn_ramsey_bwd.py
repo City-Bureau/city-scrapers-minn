@@ -6,17 +6,15 @@ from city_scrapers_core.constants import BOARD
 from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
 
-from city_scrapers.spiders.minn_ramsey_county import (
-    MinnRamseyCountyBoardOfCommissionersSpider,
-)
+from city_scrapers.spiders.minn_ramsey_county import MinnRamseyCountyBoardWorkshopSpider
 
 test_response = file_response(
-    join(dirname(__file__), "files", "minn_ramsey_boc.html"),
-    url="https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=41635&GUID=342EB836-C0D1-463A-8A12-C5C1B8BB0EBF",  # noqa
+    join(dirname(__file__), "files", "minn_ramsey_bwd.html"),
+    url="https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=44588&GUID=87E5EA0B-060D-423E-B656-A0557147DB5A",  # noqa
 )
-spider = MinnRamseyCountyBoardOfCommissionersSpider()
+spider = MinnRamseyCountyBoardWorkshopSpider()
 
-freezer = freeze_time("2026-05-07")
+freezer = freeze_time("2026-05-08")
 freezer.start()
 
 parsed_items = [
@@ -33,7 +31,7 @@ def test_count():
 
 
 def test_title():
-    assert parsed_items[0]["title"] == "Board of Commissioners"
+    assert parsed_items[0]["title"] == "Board Workshop / Discussion"
 
 
 def test_description():
@@ -41,7 +39,7 @@ def test_description():
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2026, 12, 22, 9, 0)
+    assert parsed_items[0]["start"] == datetime(2026, 6, 23, 13, 30)
 
 
 def test_end():
@@ -62,7 +60,7 @@ def test_all_day():
 
 def test_location():
     assert parsed_items[0]["location"] == {
-        "name": "Council Chambers - Courthouse Room 300",
+        "name": "Courthouse Room 220",
         "address": "15 W Kellogg Blvd, Saint Paul, MN 55102",
     }
 
@@ -70,7 +68,7 @@ def test_location():
 def test_source():
     assert (
         parsed_items[0]["source"]
-        == "https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=41635&GUID=342EB836-C0D1-463A-8A12-C5C1B8BB0EBF"  # noqa
+        == "https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=44588&GUID=87E5EA0B-060D-423E-B656-A0557147DB5A"  # noqa
     )
 
 
@@ -79,25 +77,25 @@ def test_links_empty():
 
 
 def test_links_with_documents():
-    assert parsed_items[28]["links"] == [
+    assert parsed_items[11]["links"] == [
         {
-            "href": "https://ramseycountymn.legistar.com/MeetingDetail.aspx?ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E&Options=&Search=",  # noqa
+            "href": "https://ramseycountymn.legistar.com/MeetingDetail.aspx?ID=1403756&GUID=AA88122D-B46B-46C2-A755-D69A3AE67AF2&Options=&Search=",  # noqa
             "title": "Meeting Details",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/View.ashx?M=A&ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E",  # noqa
+            "href": "https://ramseycountymn.legistar.com/View.ashx?M=A&ID=1403756&GUID=AA88122D-B46B-46C2-A755-D69A3AE67AF2",  # noqa
             "title": "Agenda",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/View.ashx?M=AADA&ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E",  # noqa
+            "href": "https://ramseycountymn.legistar.com/View.ashx?M=AADA&ID=1403756&GUID=AA88122D-B46B-46C2-A755-D69A3AE67AF2",  # noqa
             "title": "Accessible Agenda",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/View.ashx?M=PA&ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E",  # noqa
+            "href": "https://ramseycountymn.legistar.com/View.ashx?M=PA&ID=1403756&GUID=AA88122D-B46B-46C2-A755-D69A3AE67AF2",  # noqa
             "title": "Agenda Packet",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/Video.aspx?Mode=Granicus&ID1=1447&Mode2=Video",  # noqa
+            "href": "https://ramseycountymn.legistar.com/Video.aspx?Mode=Granicus&ID1=1451&Mode2=Video",  # noqa
             "title": "Video",
         },
     ]
@@ -108,10 +106,11 @@ def test_status():
 
 
 def test_status_passed():
-    assert parsed_items[28]["status"] == "passed"
+    assert parsed_items[11]["status"] == "passed"
 
 
 def test_id():
     assert (
-        parsed_items[0]["id"] == "minn_ramsey_boc/202612220900/x/board_of_commissioners"
+        parsed_items[0]["id"]
+        == "minn_ramsey_bwd/202606231330/x/board_workshop_discussion"
     )

@@ -7,16 +7,16 @@ from city_scrapers_core.utils import file_response
 from freezegun import freeze_time
 
 from city_scrapers.spiders.minn_ramsey_county import (
-    MinnRamseyCountyBoardOfCommissionersSpider,
+    MinnRamseyCountyRegionalRailroadSpider,
 )
 
 test_response = file_response(
-    join(dirname(__file__), "files", "minn_ramsey_boc.html"),
-    url="https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=41635&GUID=342EB836-C0D1-463A-8A12-C5C1B8BB0EBF",  # noqa
+    join(dirname(__file__), "files", "minn_ramsey_rra.html"),
+    url="https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=42187&GUID=7029D254-4F33-4FE0-B34A-C8AB0ABC3D54",  # noqa
 )
-spider = MinnRamseyCountyBoardOfCommissionersSpider()
+spider = MinnRamseyCountyRegionalRailroadSpider()
 
-freezer = freeze_time("2026-05-07")
+freezer = freeze_time("2026-05-08")
 freezer.start()
 
 parsed_items = [
@@ -33,7 +33,7 @@ def test_count():
 
 
 def test_title():
-    assert parsed_items[0]["title"] == "Board of Commissioners"
+    assert parsed_items[0]["title"] == "Regional Railroad Authority"
 
 
 def test_description():
@@ -41,7 +41,7 @@ def test_description():
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2026, 12, 22, 9, 0)
+    assert parsed_items[0]["start"] == datetime(2026, 5, 19, 10, 0)
 
 
 def test_end():
@@ -70,7 +70,7 @@ def test_location():
 def test_source():
     assert (
         parsed_items[0]["source"]
-        == "https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=41635&GUID=342EB836-C0D1-463A-8A12-C5C1B8BB0EBF"  # noqa
+        == "https://ramseycountymn.legistar.com/DepartmentDetail.aspx?ID=42187&GUID=7029D254-4F33-4FE0-B34A-C8AB0ABC3D54"  # noqa
     )
 
 
@@ -79,25 +79,25 @@ def test_links_empty():
 
 
 def test_links_with_documents():
-    assert parsed_items[28]["links"] == [
+    assert parsed_items[1]["links"] == [
         {
-            "href": "https://ramseycountymn.legistar.com/MeetingDetail.aspx?ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E&Options=&Search=",  # noqa
+            "href": "https://ramseycountymn.legistar.com/MeetingDetail.aspx?ID=1396765&GUID=9E2E76EA-82D2-4ADD-817B-565F9A3540BE&Options=&Search=",  # noqa
             "title": "Meeting Details",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/View.ashx?M=A&ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E",  # noqa
+            "href": "https://ramseycountymn.legistar.com/View.ashx?M=A&ID=1396765&GUID=9E2E76EA-82D2-4ADD-817B-565F9A3540BE",  # noqa
             "title": "Agenda",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/View.ashx?M=AADA&ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E",  # noqa
+            "href": "https://ramseycountymn.legistar.com/View.ashx?M=AADA&ID=1396765&GUID=9E2E76EA-82D2-4ADD-817B-565F9A3540BE",  # noqa
             "title": "Accessible Agenda",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/View.ashx?M=PA&ID=1336458&GUID=B3FC5F55-C00F-4E10-83AD-5605D05BB07E",  # noqa
+            "href": "https://ramseycountymn.legistar.com/View.ashx?M=PA&ID=1396765&GUID=9E2E76EA-82D2-4ADD-817B-565F9A3540BE",  # noqa
             "title": "Agenda Packet",
         },
         {
-            "href": "https://ramseycountymn.legistar.com/Video.aspx?Mode=Granicus&ID1=1447&Mode2=Video",  # noqa
+            "href": "https://ramseycountymn.legistar.com/Video.aspx?Mode=Granicus&ID1=1420&Mode2=Video",  # noqa
             "title": "Video",
         },
     ]
@@ -108,10 +108,11 @@ def test_status():
 
 
 def test_status_passed():
-    assert parsed_items[28]["status"] == "passed"
+    assert parsed_items[1]["status"] == "passed"
 
 
 def test_id():
     assert (
-        parsed_items[0]["id"] == "minn_ramsey_boc/202612220900/x/board_of_commissioners"
+        parsed_items[0]["id"]
+        == "minn_ramsey_rra/202605191000/x/regional_railroad_authority"
     )
