@@ -232,7 +232,7 @@ spider_configs = [
         "class_name": "MinnPhacSpider",
         "name": "minn_phac",
         "agency": "Public Health Advisory Committee",
-        "committee_id": 72,
+        "committee_id": 84,
         "meeting_type": 2,
     },
     {
