@@ -99,7 +99,13 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
             loc_text = loc_text.get("label", "")
         loc_text = " ".join(loc_text.split())
         if loc_text:
-            return {"name": loc_text, "address": self.location["address"]}
+            address = self.location["address"]
+            if any(
+                term in loc_text.lower()
+                for term in ["remote", "zoom", "video", "virtual"]
+            ):
+                address = ""
+            return {"name": loc_text, "address": address}
         return self.location
 
     def _parse_links(self, item):
