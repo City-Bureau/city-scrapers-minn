@@ -6,48 +6,30 @@ import pytest
 from city_scrapers_core.constants import BOARD, COMMISSION
 from freezegun import freeze_time
 
-from city_scrapers.mixins.minn_city import MinnCityMixin
-
-
-class MinnPlannCoTestSpider(MinnCityMixin):
-    name = "minn_plann_co"
-    agency = "Planning Commission"
-    committee_id = 81
-    meeting_type = 4
-
-
-class MinnCharCoTestSpider(MinnCityMixin):
-    name = "minn_char_co"
-    agency = "Charter Commission"
-    committee_id = 42
-    meeting_type = 4
-    marked_agenda_path = "MarkedAgenda"
-
-
-class MinnEpbTestSpider(MinnCityMixin):
-    name = "minn_epb"
-    agency = "Ethical Practices Board"
-    committee_id = 53
-    meeting_type = 4
+from city_scrapers.spiders.minn_city import (
+    MinnCharCoSpider,
+    MinnEpbSpider,
+    MinnPlannCoSpider,
+)
 
 
 @pytest.fixture
 def planning_spider():
-    spider = MinnPlannCoTestSpider()
+    spider = MinnPlannCoSpider()
     spider._links_by_date = {}
     return spider
 
 
 @pytest.fixture
 def charter_spider():
-    spider = MinnCharCoTestSpider()
+    spider = MinnCharCoSpider()
     spider._links_by_date = {}
     return spider
 
 
 @pytest.fixture
 def epb_spider():
-    spider = MinnEpbTestSpider()
+    spider = MinnEpbSpider()
     spider._links_by_date = {}
     return spider
 
@@ -78,7 +60,7 @@ class TestMeetingFields:
         item = get_calendar_item(calendar_json, planning_spider.committee_id)
 
         assert planning_spider.name == "minn_plann_co"
-        assert planning_spider.agency == "Planning Commission"
+        assert planning_spider.agency == "Minneapolis Planning Commission"
         assert planning_spider.committee_id == 81
         assert planning_spider.meeting_type == 4
 
@@ -160,8 +142,7 @@ def test_charter_attachment_links(charter_spider, attachment_json):
     assert {
         "title": "Report/Proceedings",
         "href": (
-            "https://lims.minneapolismn.gov/Download/CommitteeReport/"
-            "4670/Charter_01212026_Committee_Report.pdf"
+            "https://lims.minneapolismn.gov/Download/CommitteeReport/4670/Charter_01212026_Committee_Report.pdf"  # noqa
         ),
     } in result
 
@@ -281,11 +262,7 @@ def test_planning_request_attachment_endpoint_uses_endpoint_default(
     assert request.meta["marked_agenda_path"] == "Board/MarkedAgenda"
 
 
-def test_source_url_is_shared_by_all_spiders(
-    planning_spider, charter_spider, epb_spider
-):
-    expected_source = "https://lims.minneapolismn.gov/Calendar/all/monthly"
-
-    assert planning_spider.source_url == expected_source
-    assert charter_spider.source_url == expected_source
-    assert epb_spider.source_url == expected_source
+def test_parse_source_falls_back_to_general_calendar(planning_spider):
+    assert planning_spider._parse_source([]) == (
+        "https://lims.minneapolismn.gov/Calendar/all/monthly"
+    )

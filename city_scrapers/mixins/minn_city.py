@@ -35,8 +35,9 @@ class MinnCityMixinMeta(type):
 
 class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     timezone = "America/North_Dakota/Beulah"
-    from_date = datetime.now() - timedelta(days=365 * 4)
-    to_date = datetime.now() + timedelta(days=365)
+    today = datetime.now()
+    from_date = today - timedelta(days=365 * 4)
+    to_date = today + timedelta(days=365)
     source_url = "https://lims.minneapolismn.gov/Calendar/all/monthly"
     lims_base_url = "https://lims.minneapolismn.gov"
     calendar_path = "Calendar/GetCalenderList"
@@ -62,48 +63,47 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     meeting_type = None
     abbreviation = None
 
+    attachment_formdata = {
+        "draw": "1",
+        "columns[0][data]": "CommitteeName",
+        "columns[0][name]": "CommitteeName",
+        "columns[0][searchable]": "true",
+        "columns[0][orderable]": "true",
+        "columns[0][search][value]": "",
+        "columns[0][search][regex]": "false",
+        "columns[1][data]": "MeetingDate",
+        "columns[1][name]": "MeetingDate",
+        "columns[1][searchable]": "true",
+        "columns[1][orderable]": "true",
+        "columns[1][search][value]": "",
+        "columns[1][search][regex]": "false",
+        "columns[2][data]": "MeetingDate",
+        "columns[2][name]": "MeetingDate",
+        "columns[2][searchable]": "true",
+        "columns[2][orderable]": "false",
+        "columns[2][search][value]": "",
+        "columns[2][search][regex]": "false",
+        "columns[3][data]": "Video",
+        "columns[3][name]": "Video",
+        "columns[3][searchable]": "true",
+        "columns[3][orderable]": "false",
+        "columns[3][search][value]": "",
+        "columns[3][search][regex]": "false",
+        "order[0][column]": "1",
+        "order[0][dir]": "DESC",
+        "start": "0",
+        "length": "3000",
+        "search[value]": "",
+        "search[regex]": "false",
+    }
+
     def start_requests(self):
         self._links_by_date = {}
         yield self._request_attachment_endpoint(0)
 
-    def _get_attachment_formdata(self):
-        return {
-            "draw": "1",
-            "columns[0][data]": "CommitteeName",
-            "columns[0][name]": "CommitteeName",
-            "columns[0][searchable]": "true",
-            "columns[0][orderable]": "true",
-            "columns[0][search][value]": "",
-            "columns[0][search][regex]": "false",
-            "columns[1][data]": "MeetingDate",
-            "columns[1][name]": "MeetingDate",
-            "columns[1][searchable]": "true",
-            "columns[1][orderable]": "true",
-            "columns[1][search][value]": "",
-            "columns[1][search][regex]": "false",
-            "columns[2][data]": "MeetingDate",
-            "columns[2][name]": "MeetingDate",
-            "columns[2][searchable]": "true",
-            "columns[2][orderable]": "false",
-            "columns[2][search][value]": "",
-            "columns[2][search][regex]": "false",
-            "columns[3][data]": "Video",
-            "columns[3][name]": "Video",
-            "columns[3][searchable]": "true",
-            "columns[3][orderable]": "false",
-            "columns[3][search][value]": "",
-            "columns[3][search][regex]": "false",
-            "order[0][column]": "1",
-            "order[0][dir]": "DESC",
-            "start": "0",
-            "length": "3000",
-            "search[value]": "",
-            "search[regex]": "false",
-        }
-
     def _request_attachment_endpoint(self, endpoint_index):
         endpoint = self.attachment_endpoints[endpoint_index]
-        formdata = self._get_attachment_formdata()
+        formdata = self.attachment_formdata.copy()
 
         if self.abbreviation:
             formdata["abbreviation"] = self.abbreviation
@@ -221,6 +221,10 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
             callback=self.parse,
         )
 
+    def _parse_source(self, links):
+        agenda = next((l["href"] for l in links if l.get("title") == "Agenda"), None)
+        return agenda or self.source_url
+
     def parse(self, response):
         """
         Extract JSON from the HTML response and parse it into a list of Meeting items.
@@ -228,6 +232,7 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         json_data = response.css("pre::text").get()
         data = json.loads(json_data)
         for item in data:
+            links = self._parse_links(item)
             meeting = Meeting(
                 title=str(item["CommitteeName"]),
                 description=str(item["Description"]),
@@ -237,25 +242,13 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
                 all_day=False,
                 time_notes="",
                 location=self._parse_location(item),
-                links=self._parse_links(item),
-                source=self.source_url,
+                links=links,
+                source=self._parse_source(links),
             )
-            if item["Cancelled"]:
-                meeting["status"] = self._get_status(
-                    meeting, text="Meeting is cancelled"
-                )
-            else:
-                meeting["status"] = self._get_status(meeting)
+            status_str = "cancel" if item["Cancelled"] else ""
+            meeting["status"] = self._get_status(meeting, text=status_str)
             meeting["id"] = self._get_id(meeting)
             yield meeting
-
-    def _parse_title(self, item):
-        """Parse or generate meeting title."""
-        return ""
-
-    def _parse_description(self, item):
-        """Parse or generate meeting description."""
-        return ""
 
     def _parse_classification(self, item):
         """Parse or generate classification from title."""
@@ -276,18 +269,6 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     def _parse_start(self, item):
         """Parse start datetime as a naive datetime object."""
         return datetime.strptime(item["MeetingTime"], "%Y-%m-%dT%H:%M:%S")
-
-    def _parse_end(self, item):
-        """Parse end datetime as a naive datetime object. Added by pipeline if None"""
-        return None
-
-    def _parse_time_notes(self, item):
-        """Parse any additional notes on the timing of the meeting"""
-        return ""
-
-    def _parse_all_day(self, item):
-        """Parse or generate all-day status. Defaults to False."""
-        return False
 
     def _parse_location(self, item):
         """Parse or generate location."""

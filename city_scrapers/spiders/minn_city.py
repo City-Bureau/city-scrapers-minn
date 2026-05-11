@@ -245,7 +245,7 @@ spider_configs = [
     {
         "class_name": "MinnPlannCoSpider",
         "name": "minn_plann_co",
-        "agency": "Planning Commission",
+        "agency": "Minneapolis Planning Commission",
         "committee_id": 81,
         "meeting_type": 4,
     },
