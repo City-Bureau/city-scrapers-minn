@@ -1,6 +1,7 @@
 import json
 import urllib.parse
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import scrapy
 from city_scrapers_core.constants import (
@@ -35,13 +36,15 @@ class MinnCityMixinMeta(type):
 
 class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     timezone = "America/North_Dakota/Beulah"
-    today = datetime.now()
+    today = datetime.now(tz=ZoneInfo(timezone)).date()
     from_date = today - timedelta(days=365 * 4)
     to_date = today + timedelta(days=365)
     source_url = "https://lims.minneapolismn.gov/Calendar/all/monthly"
     lims_base_url = "https://lims.minneapolismn.gov"
     calendar_path = "Calendar/GetCalenderList"
-
+    custom_settings = {
+        "FEED_EXPORT_ENCODING": "utf-8",
+    }
     attachment_endpoints = [
         {
             "path": "CityCouncil/CityCouncilMeetingsPagedList",
