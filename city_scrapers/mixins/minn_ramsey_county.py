@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 import scrapy
@@ -126,13 +127,15 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
             loc_text = loc_text.get("label", "")
         loc_text = " ".join(loc_text.split())
         if loc_text:
-            address = self.location["address"]
             if any(
                 term in loc_text.lower()
                 for term in ["remote", "zoom", "video", "virtual"]
             ):
-                address = ""
-            return {"name": loc_text, "address": address}
+                return {"name": loc_text, "address": ""}
+            match = re.match(r"^(.+?) - (\d+.+)$", loc_text)
+            if match:
+                return {"name": match.group(1).strip(), "address": match.group(2).strip()}
+            return {"name": loc_text, "address": self.location["address"]}
         return self.location
 
     def _parse_links(self, item):
