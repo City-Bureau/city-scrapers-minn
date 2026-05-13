@@ -139,7 +139,6 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         """Collect all available document links from a Legistar event dict."""
         links = []
         link_keys = [
-            "Meeting Details",
             "Agenda",
             "Accessible Agenda",
             "Agenda Packet",
