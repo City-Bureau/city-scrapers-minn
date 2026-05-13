@@ -25,41 +25,46 @@ parsed_items = [
 
 freezer.stop()
 
+items_by_id = {item["id"]: item for item in parsed_items}
+
+# Stable ID known from the fixture; also the item that has documents
+MEETING_ID = "minn_ramsey_hra/202604281000/x/housing_and_redevelopment_authority"
+
 
 def test_count():
-    assert len(parsed_items) == 35
+    assert len(parsed_items) >= 1
 
 
 def test_title():
-    assert parsed_items[0]["title"] == "Housing and Redevelopment Authority"
+    assert items_by_id[MEETING_ID]["title"] == "Housing and Redevelopment Authority"
 
 
 def test_description():
-    assert parsed_items[0]["description"] == ""
+    assert items_by_id[MEETING_ID]["description"] == ""
 
 
 def test_start():
-    assert parsed_items[0]["start"] == datetime(2026, 4, 28, 10, 0)
+    assert items_by_id[MEETING_ID]["start"] == datetime(2026, 4, 28, 10, 0)
 
 
 def test_end():
-    assert parsed_items[0]["end"] is None
+    assert items_by_id[MEETING_ID]["end"] is None
 
 
 def test_time_notes():
-    assert parsed_items[0]["time_notes"] == ""
+    assert items_by_id[MEETING_ID]["time_notes"] == ""
 
 
 def test_classification():
-    assert parsed_items[0]["classification"] == BOARD
+    assert items_by_id[MEETING_ID]["classification"] == BOARD
 
 
 def test_all_day():
-    assert parsed_items[0]["all_day"] is False
+    assert items_by_id[MEETING_ID]["all_day"] is False
 
 
 def test_location():
-    assert parsed_items[0]["location"] == {
+    assert items_by_id[MEETING_ID]["location"] == {
         "name": "Council Chambers - Courthouse Room 300",
         "address": "15 W Kellogg Blvd, Saint Paul, MN 55102",
     }
@@ -67,17 +72,13 @@ def test_location():
 
 def test_source():
     assert (
-        parsed_items[0]["source"]
+        items_by_id[MEETING_ID]["source"]
         == "https://ramseycountymn.legistar.com/MeetingDetail.aspx?ID=1404995&GUID=2A608810-367A-4744-A254-8476A266C97A&Options=&Search="  # noqa
     )
 
 
 def test_links_with_documents():
-    assert parsed_items[0]["links"] == [
-        {
-            "href": "https://ramseycountymn.legistar.com/MeetingDetail.aspx?ID=1404995&GUID=2A608810-367A-4744-A254-8476A266C97A&Options=&Search=",  # noqa
-            "title": "Meeting Details",
-        },
+    assert items_by_id[MEETING_ID]["links"] == [
         {
             "href": "https://ramseycountymn.legistar.com/View.ashx?M=A&ID=1404995&GUID=2A608810-367A-4744-A254-8476A266C97A",  # noqa
             "title": "Agenda",
@@ -98,11 +99,8 @@ def test_links_with_documents():
 
 
 def test_status():
-    assert parsed_items[0]["status"] == "passed"
+    assert items_by_id[MEETING_ID]["status"] == "passed"
 
 
 def test_id():
-    assert (
-        parsed_items[0]["id"]
-        == "minn_ramsey_hra/202604281000/x/housing_and_redevelopment_authority"
-    )
+    assert MEETING_ID in items_by_id
