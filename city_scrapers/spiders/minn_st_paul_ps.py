@@ -19,9 +19,13 @@ class MinnStPaulPsSpider(CityScrapersSpider):
     ical_url = "https://calendar.google.com/calendar/ical/2pe1lc650lrr2moeok6a7g1em4%40group.calendar.google.com/public/basic.ics"  # noqa
     boardbook_attachment_url = "https://meetings.boardbook.org/Public/Organization/1810"
     archive_attachment_url = "https://www.spps.org/about/board-of-education/meeting-materials-archive/{year}-meeting-materials"  # noqa
-    materials = {}
-    boardbook_links = {}
-    materials_pending = 0
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.materials = {}
+        self.boardbook_links = {}
+        self.materials_pending = 0
+
     location_regular_board = {
         "name": "Conference Rooms A and B",
         "address": "360 Colborne St, St Paul, MN 55102",
@@ -60,7 +64,7 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                 errback=self.materials_errback,
             )
 
-    def _trigger_ical_if_ready(self):
+    def _trigger_ical(self):
         """Decrement counter and trigger iCal fetch when all sources are done."""
         self.materials_pending -= 1
         if self.materials_pending == 0:
@@ -70,19 +74,10 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             )
         return None
 
-    def _build_link(self, a, base_url=""):
-        """Build a link dict from an anchor element."""
-        href = a.attrib.get("href", "")
-        title = a.css("::text").get("").strip()
-        if base_url and href.startswith("/"):
-            href = f"{base_url}{href}"
-        if not href and not title:
-            return None
-        return {"href": href, "title": title}
-
     def materials_errback(self, failure):
         """Handle failed requests and trigger iCal if all sources are done."""
-        request = self._trigger_ical_if_ready()
+        self.logger.error(f"Request failed: {failure.request.url}")
+        request = self._trigger_ical()
         if request:
             yield request
 
@@ -103,12 +98,14 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             if not match:
                 continue
 
-            date_str, _, meeting_type = match.groups()
+            date_str, time_str, meeting_type = match.groups()
             meeting_type = meeting_type.strip().lower()
 
             try:
                 meeting_date = parse_date(date_str).date()
+                meeting_time = parse_date(f"{date_str} {time_str.strip()}").time()
             except Exception:
+                self.logger.error(f"Failed to parse date: {date_str} {time_str}")
                 continue
 
             links = [
@@ -126,9 +123,9 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                     not in self.excluded_link_titles
                 )
             ]
-            self.boardbook_links[(meeting_date, meeting_type)] = links
+            self.boardbook_links[(meeting_date, meeting_time, meeting_type)] = links
 
-        request = self._trigger_ical_if_ready()
+        request = self._trigger_ical()
         if request:
             yield request
 
@@ -157,6 +154,7 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                     ).strip()
                     meeting_date = parse_date(date_text_clean).date()
                 except Exception:
+                    self.logger.error(f"Failed to parse date: {date_text}")
                     continue
 
                 links = [
@@ -173,16 +171,17 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                 if subtitle:
                     self.materials[(meeting_date, subtitle.lower())] = links
 
-        request = self._trigger_ical_if_ready()
+        request = self._trigger_ical()
         if request:
             yield request
 
     def parse(self, response):
         """Parse meetings from iCal feed and merge with materials and boardbook links."""  # noqa
+
         try:
             cal = Calendar.from_ical(response.text)
-        except Exception:
-            self.logger.error(f"Failed to parse iCal from {response.url}")
+        except Exception as e:
+            self.logger.error(f"Failed to parse iCal from {response.url}: {e}")
             return
 
         current_year = datetime.now().year
@@ -224,18 +223,34 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                     if len(matched_keys) == 1:
                         links = self.materials[matched_keys[0]]
 
-            # merge links from boardbook url
-            boardbook_date_keys = [
-                k for k in self.boardbook_links if k[0] == meeting_date
-            ]
-            if boardbook_date_keys:
-                if len(boardbook_date_keys) == 1:
-                    links = links + self.boardbook_links[boardbook_date_keys[0]]
-                elif meeting_type:
-                    for k in boardbook_date_keys:
-                        if meeting_type.lower() in k[1]:
-                            links = links + self.boardbook_links[k]
-                            break
+            # only fall back to boardbook links if no materials links were found
+            if not links:
+                boardbook_date_keys = [
+                    k for k in self.boardbook_links if k[0] == meeting_date
+                ]
+
+                if boardbook_date_keys:
+                    start_time = start.time() if start else None
+                    time_matched = [
+                        k
+                        for k in boardbook_date_keys
+                        if start_time and k[1] == start_time
+                    ]
+
+                    if time_matched:
+                        if len(time_matched) == 1:
+                            links = self.boardbook_links[time_matched[0]]
+                        elif meeting_type:
+                            for k in time_matched:
+                                if meeting_type.lower() in k[2]:
+                                    links = self.boardbook_links[k]
+                                    break
+                    elif meeting_type:
+                        for k in boardbook_date_keys:
+                            if meeting_type.lower() in k[2]:
+                                links = self.boardbook_links[k]
+                                break
+
             links = [link for link in links if link.get("href") or link.get("title")]
 
             meeting = Meeting(
@@ -293,6 +308,16 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             return dt
         return datetime(dt.year, dt.month, dt.day)
 
+    def _build_link(self, a, base_url=""):
+        """Build a link dict from an anchor element or None if empty."""
+        href = a.attrib.get("href", "")
+        title = a.css("::text").get("").strip()
+        if base_url and href.startswith("/"):
+            href = f"{base_url}{href}"
+        if not href and not title:
+            return None
+        return {"href": href, "title": title}
+
     def _parse_location(self, event):
         """Parse location from VEVENT."""
         location = str(event.get("location", "")).strip()
@@ -310,7 +335,9 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                 address = parts[1].strip() if len(parts) > 1 else location
 
             # override name for known SPPS address
-            if "360 colborne" in address.lower() or "360 s colborne" in address.lower():
+            if not name and (
+                "360 colborne" in address.lower() or "360 s colborne" in address.lower()
+            ):
                 name = "Saint Paul Public Schools"
 
             return {"name": name, "address": address}
