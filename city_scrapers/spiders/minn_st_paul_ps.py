@@ -195,62 +195,13 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             if not start:
                 continue
 
-            title = self._parse_title(event)
-
-            # normalize "Special Regular Board of Education Meeting" at 5:30
-            if "special regular board of education" in title.lower():
-                start_time = start.strftime("%H:%M")
-                if start_time == "17:30":
-                    title = "Regular Board of Education Meeting"
-
+            title = self._normalize_title(self._parse_title(event), start)
             end = self._parse_dt(event.get("dtend"))
             links = []
             meeting_date = start.date()
             meeting_type = self._get_meeting_type(title)
 
-            # merge materials links from archive url
-            if meeting_type:
-                # check for an exact match first
-                key = (meeting_date, meeting_type)
-                if key in self.materials:
-                    links = self.materials[key]
-                else:
-                    # partial match — check if meeting_type is contained in stored key
-                    date_keys = [k for k in self.materials if k[0] == meeting_date]
-                    matched_keys = [
-                        k for k in date_keys if meeting_type.lower() in k[1].lower()
-                    ]
-                    if len(matched_keys) == 1:
-                        links = self.materials[matched_keys[0]]
-
-            # only fall back to boardbook links if no materials links were found
-            if not links:
-                boardbook_date_keys = [
-                    k for k in self.boardbook_links if k[0] == meeting_date
-                ]
-
-                if boardbook_date_keys:
-                    start_time = start.time() if start else None
-                    time_matched = [
-                        k
-                        for k in boardbook_date_keys
-                        if start_time and k[1] == start_time
-                    ]
-
-                    if time_matched:
-                        if len(time_matched) == 1:
-                            links = self.boardbook_links[time_matched[0]]
-                        elif meeting_type:
-                            for k in time_matched:
-                                if meeting_type.lower() in k[2]:
-                                    links = self.boardbook_links[k]
-                                    break
-                    elif meeting_type:
-                        for k in boardbook_date_keys:
-                            if meeting_type.lower() in k[2]:
-                                links = self.boardbook_links[k]
-                                break
-
+            links = self._resolve_links(meeting_date, meeting_type, start.time())
             links = [link for link in links if link.get("href") or link.get("title")]
 
             meeting = Meeting(
@@ -292,6 +243,15 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             return "annual"
         return None
 
+    def _normalize_title(self, title, start):
+        """Normalize edge-case meeting titles."""
+        if (
+            "special regular board of education" in title.lower()
+            and start.strftime("%H:%M") == "17:30"
+        ):
+            return "Regular Board of Education Meeting"
+        return title
+
     def _parse_title(self, event):
         """Parse title from VEVENT summary."""
         return str(event.get("summary", "")).strip()
@@ -307,6 +267,48 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                 dt = dt.astimezone(local_tz).replace(tzinfo=None)
             return dt
         return datetime(dt.year, dt.month, dt.day)
+
+    def _resolve_links(self, meeting_date, meeting_type, start_time):
+        """Return the best available links: materials first, boardbook as fallback."""
+        if meeting_type:
+            links = self._get_materials_links(meeting_date, meeting_type)
+            if links:
+                return links
+        return self._get_boardbook_links(meeting_date, meeting_type, start_time)
+
+    def _get_materials_links(self, meeting_date, meeting_type):
+        """Find materials links with exact or partial match on meeting type."""
+        key = (meeting_date, meeting_type)
+        if key in self.materials:
+            return self.materials[key]
+
+        date_keys = [k for k in self.materials if k[0] == meeting_date]
+        matched_keys = [k for k in date_keys if meeting_type.lower() in k[1].lower()]
+        if len(matched_keys) == 1:
+            return self.materials[matched_keys[0]]
+        return []
+
+    def _get_boardbook_links(self, meeting_date, meeting_type, start_time):
+        """Find boardbook links matching on date, time, and meeting type."""
+        date_keys = [k for k in self.boardbook_links if k[0] == meeting_date]
+        if not date_keys:
+            return []
+
+        time_matched = [k for k in date_keys if start_time and k[1] == start_time]
+        if time_matched:
+            if len(time_matched) == 1:
+                return self.boardbook_links[time_matched[0]]
+            elif meeting_type:
+                for k in time_matched:
+                    if meeting_type.lower() in k[2]:
+                        return self.boardbook_links[k]
+
+        if meeting_type:
+            for k in date_keys:
+                if meeting_type.lower() in k[2]:
+                    return self.boardbook_links[k]
+
+        return []
 
     def _build_link(self, a, base_url=""):
         """Build a link dict from an anchor element or None if empty."""
