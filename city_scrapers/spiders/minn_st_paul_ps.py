@@ -72,6 +72,7 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                 self.ical_url,
                 callback=self.parse,
             )
+        self.logger.info(f"Waiting for {self.materials_pending} materials sources to finish before fetching iCal")
         return None
 
     def materials_errback(self, failure):
@@ -241,6 +242,7 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             return "Board of Education"
         if "annual" in title_lower:
             return "annual"
+        self.logger.warning(f"Unrecognized meeting type for title: {title}")
         return None
 
     def _normalize_title(self, title, start):
@@ -259,6 +261,7 @@ class MinnStPaulPsSpider(CityScrapersSpider):
     def _parse_dt(self, dt_prop):
         """Parse a dtstart/dtend property into a naive datetime in local time."""
         if dt_prop is None:
+            self.logger.warning("Missing dtstart/dtend property in event, skipping")
             return None
         dt = dt_prop.dt
         if isinstance(dt, datetime):
@@ -313,10 +316,11 @@ class MinnStPaulPsSpider(CityScrapersSpider):
     def _build_link(self, a, base_url=""):
         """Build a link dict from an anchor element or None if empty."""
         href = a.attrib.get("href", "")
-        title = a.css("::text").get("").strip()
+        title = a.css("::text").get("").strip() or "Attachment"
         if base_url and href.startswith("/"):
             href = f"{base_url}{href}"
         if not href and not title:
+            self.logger.warning("Found link with no href or title, skipping")
             return None
         return {"href": href, "title": title}
 
