@@ -13,7 +13,7 @@ from icalendar import Calendar
 
 class MinnStPaulPsSpider(CityScrapersSpider):
     name = "minn_st_paul_ps"
-    agency = "St. Paul Public Schools Board of Education"
+    agency = "St. Paul School Board"
     timezone = "America/Chicago"
     source_url = "https://www.spps.org/about/board-of-education/calendar"
     ical_url = "https://calendar.google.com/calendar/ical/2pe1lc650lrr2moeok6a7g1em4%40group.calendar.google.com/public/basic.ics"  # noqa
