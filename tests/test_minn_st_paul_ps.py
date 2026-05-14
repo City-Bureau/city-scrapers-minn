@@ -114,9 +114,18 @@ def test_source(parsed_items):
 def test_links(parsed_items):
     item = next(i for i in parsed_items if i["start"] == datetime(2026, 2, 17, 17, 30))
     assert item["links"] == [
-        {"href": "https://www.spps.org/fs/resource-manager/view/0f82e1a3-a733-4734-a819-78f5f9a05571", "title": "Agenda"},
-        {"href": "https://www.spps.org/fs/resource-manager/view/9866abb5-a4f5-4e98-8d2b-7c8618314eca", "title": "BoardBook"},
-        {"href": "https://www.spps.org/fs/resource-manager/view/80cc2999-85a2-45a7-9a1e-cdae72a703fb", "title": "Minutes"},
+        {
+            "href": "https://www.spps.org/fs/resource-manager/view/0f82e1a3-a733-4734-a819-78f5f9a05571",  # noqa
+            "title": "Agenda",
+        },
+        {
+            "href": "https://www.spps.org/fs/resource-manager/view/9866abb5-a4f5-4e98-8d2b-7c8618314eca",  # noqa
+            "title": "BoardBook",
+        },
+        {
+            "href": "https://www.spps.org/fs/resource-manager/view/80cc2999-85a2-45a7-9a1e-cdae72a703fb",  # noqa
+            "title": "Minutes",
+        },
         {"href": "https://www.eduvision.tv/l?mmmARDDS", "title": "Video"},
     ]
 

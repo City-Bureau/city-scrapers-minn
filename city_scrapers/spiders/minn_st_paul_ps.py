@@ -204,7 +204,7 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                     title = "Regular Board of Education Meeting"
 
             end = self._parse_dt(event.get("dtend"))
-            links = self._parse_links(event)
+            links = []
             meeting_date = start.date()
             meeting_type = self._get_meeting_type(title)
 
@@ -349,10 +349,3 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             return self.location_regular_board
 
         return {"name": "", "address": location}
-
-    def _parse_links(self, event):
-        """Parse links from VEVENT url."""
-        url = str(event.get("url", "")).strip()
-        if url:
-            return [{"href": url, "title": "Event Link"}]
-        return []
