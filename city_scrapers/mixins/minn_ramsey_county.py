@@ -102,13 +102,16 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
                 return datetime.strptime(
                     f"{start_date} {start_time}", "%m/%d/%Y %I:%M %p"
                 )
-            except ValueError:
+            except ValueError as e:
+                self.logger.warning(f"Error while parsing start time for: {item} - {e}")
                 pass
         if start_date:
             try:
                 return datetime.strptime(start_date, "%m/%d/%Y")
-            except ValueError:
+            except ValueError as e:
+                self.logger.warning(f"Error while parsing start time for: {item} - {e}")
                 pass
+        self.logger.warning(f"Unable to parse start datetime from item: {item}")
         return None
 
     def _parse_classification(self):
