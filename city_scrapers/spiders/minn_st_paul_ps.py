@@ -72,7 +72,9 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                 self.ical_url,
                 callback=self.parse,
             )
-        self.logger.info(f"Waiting for {self.materials_pending} materials sources to finish before fetching iCal")
+        self.logger.info(
+            f"Waiting for {self.materials_pending} materials sources to finish before fetching iCal"  # noqa
+        )
         return None
 
     def materials_errback(self, failure):
@@ -146,16 +148,12 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                     date_text = date_text.strip()
                     subtitle = subtitle.strip()
 
-                try:
-                    # remove (Wed) etc from date text before parsing
-                    date_text_clean = re.sub(r"\s*\([^)]*\)", "", date_text).strip()
-                    # remove *bold* text from date text before parsing
-                    date_text_clean = re.sub(
-                        r"\s*\*[^*]*\*", "", date_text_clean
-                    ).strip()
-                    meeting_date = parse_date(date_text_clean).date()
-                except Exception:
-                    self.logger.error(f"Failed to parse date: {date_text}")
+                # remove (Wed) etc and *bold* text before parsing
+                date_text_clean = re.sub(r"\s*\([^)]*\)", "", date_text).strip()
+                date_text_clean = re.sub(r"\s*\*[^*]*\*", "", date_text_clean).strip()
+
+                meeting_dates = self._parse_meeting_dates(date_text_clean)
+                if not meeting_dates:
                     continue
 
                 links = [
@@ -168,9 +166,10 @@ class MinnStPaulPsSpider(CityScrapersSpider):
                     )
                     if link and (link.get("href") or link.get("title"))
                 ]
-                self.materials[(meeting_date, category)] = links
-                if subtitle:
-                    self.materials[(meeting_date, subtitle.lower())] = links
+                for meeting_date in meeting_dates:
+                    self.materials[(meeting_date, category)] = links
+                    if subtitle:
+                        self.materials[(meeting_date, subtitle.lower())] = links
 
         request = self._trigger_ical()
         if request:
@@ -355,3 +354,22 @@ class MinnStPaulPsSpider(CityScrapersSpider):
             return self.location_regular_board
 
         return {"name": "", "address": location}
+
+    def _parse_meeting_dates(self, date_text):
+        """Parse a single date or range like 'January 26-27, 2024' into a list of dates."""  # noqa
+        range_match = re.match(r"(\w+ )(\d+)-(\d+)(, \d{4})", date_text)
+        if range_match:
+            prefix, day_start, day_end, suffix = range_match.groups()
+            dates = []
+            for day in range(int(day_start), int(day_end) + 1):
+                try:
+                    dates.append(parse_date(f"{prefix}{day}{suffix}").date())
+                except Exception:
+                    self.logger.error(f"Failed to parse date in range: {date_text}")
+            return dates
+
+        try:
+            return [parse_date(date_text).date()]
+        except Exception:
+            self.logger.error(f"Failed to parse date: {date_text}")
+            return []
