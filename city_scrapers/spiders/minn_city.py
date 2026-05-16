@@ -5,7 +5,6 @@ spider_configs = [
         "class_name": "MinnAuditCoSpider",
         "name": "minn_audit_co",
         "agency": "Minneapolis Audit Committee",
-        "category_label": "Audit Committee Meeting",
         "committee_id": 1,
         "meeting_type": 4,
         "marked_agenda_path": "MarkedAgenda",

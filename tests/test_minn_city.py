@@ -3,10 +3,11 @@ from datetime import datetime
 from os.path import dirname, join
 
 import pytest
-from city_scrapers_core.constants import BOARD, COMMISSION
+from city_scrapers_core.constants import BOARD, CITY_COUNCIL, COMMISSION
 from freezegun import freeze_time
 
 from city_scrapers.spiders.minn_city import (
+    MinnBoardSpider,
     MinnCharCoSpider,
     MinnEpbSpider,
     MinnPlannCoSpider,
@@ -30,6 +31,13 @@ def charter_spider():
 @pytest.fixture
 def epb_spider():
     spider = MinnEpbSpider()
+    spider._links_by_date = {}
+    return spider
+
+
+@pytest.fixture
+def board_spider():
+    spider = MinnBoardSpider()
     spider._links_by_date = {}
     return spider
 
@@ -113,17 +121,38 @@ class TestMeetingFields:
             "name": "Room 350, Public Service Center",
         }
 
+    def test_board_fields(self, board_spider, calendar_json):
+        item = get_calendar_item(calendar_json, board_spider.committee_id)
+
+        assert board_spider.name == "minn_board"
+        assert board_spider.agency == "Minneapolis City Council - Board"
+        assert board_spider.committee_id == 16
+        assert board_spider.meeting_type == 1
+
+        assert item["CommitteeName"] == "City Council"
+        assert item["CommitteeId"] == board_spider.committee_id
+        assert item["Cancelled"] is False
+
+        assert board_spider._parse_start(item) == datetime(2026, 4, 9, 9, 30)
+
+        assert board_spider._parse_location(item) == {
+            "address": "350 S. 5th St., Minneapolis, MN 55415",
+            "name": "Room 380, City Hall",
+        }
+
 
 def test_parse_classification_from_calendar_json(
-    planning_spider, charter_spider, epb_spider, calendar_json
+    planning_spider, charter_spider, epb_spider, board_spider, calendar_json
 ):
     planning_item = get_calendar_item(calendar_json, planning_spider.committee_id)
     charter_item = get_calendar_item(calendar_json, charter_spider.committee_id)
     epb_item = get_calendar_item(calendar_json, epb_spider.committee_id)
+    board_item = get_calendar_item(calendar_json, board_spider.committee_id)
 
     assert planning_spider._parse_classification(planning_item) == COMMISSION
     assert charter_spider._parse_classification(charter_item) == COMMISSION
     assert epb_spider._parse_classification(epb_item) == BOARD
+    assert board_spider._parse_classification(board_item) == CITY_COUNCIL
 
 
 def test_charter_attachment_links(charter_spider, attachment_json):
@@ -266,3 +295,94 @@ def test_parse_source_falls_back_to_general_calendar(planning_spider):
     assert planning_spider._parse_source([]) == (
         "https://lims.minneapolismn.gov/Calendar/all/monthly"
     )
+
+
+def test_board_attachment_links(board_spider, attachment_json):
+    item = attachment_json[1]
+
+    result = board_spider._parse_attachment_links(
+        item,
+        marked_agenda_path="MarkedAgenda",
+    )
+
+    assert {
+        "title": "Video",
+        "href": "https://youtube.com/watch?v=rwMHeiUUoDs",
+    } in result
+    assert {
+        "title": "Report/Proceedings",
+        "href": "https://lims.minneapolismn.gov/Download/CommitteeReport/4748/Council-Proceedings-0409.pdf",  # noqa
+    } in result
+    assert {
+        "title": "Agenda",
+        "href": "https://lims.minneapolismn.gov/MarkedAgenda/Council/5914",
+    } in result
+    assert len(result) == 3
+
+
+def test_board_attachment_links_are_saved_by_meeting_date(
+    board_spider, attachment_json
+):
+    item = attachment_json[1]
+    meeting_date = item["meetingDate"][:10]
+
+    links = board_spider._parse_attachment_links(
+        item, marked_agenda_path="MarkedAgenda"
+    )
+
+    board_spider._links_by_date.setdefault(meeting_date, [])
+    board_spider._links_by_date[meeting_date].extend(links)
+
+    assert meeting_date == "2026-04-09"
+    assert "2026-04-09" in board_spider._links_by_date
+    assert len(board_spider._links_by_date["2026-04-09"]) == 3
+
+    titles = [link["title"] for link in board_spider._links_by_date["2026-04-09"]]
+
+    assert "Video" in titles
+    assert "Report/Proceedings" in titles
+    assert "Agenda" in titles
+
+
+def test_board_calendar_item_receives_matching_attachment_links(
+    board_spider, attachment_json, calendar_json
+):
+    attachment_item = attachment_json[1]
+    board_calendar_item = get_calendar_item(calendar_json, board_spider.committee_id)
+
+    meeting_date = attachment_item["meetingDate"][:10]
+
+    board_spider._links_by_date[meeting_date] = board_spider._parse_attachment_links(
+        attachment_item,
+        marked_agenda_path="MarkedAgenda",
+    )
+
+    result = board_spider._parse_links(board_calendar_item)
+
+    assert board_calendar_item["MeetingTime"][:10] == "2026-04-09"
+    assert len(result) == 3
+    assert any(link["title"] == "Video" for link in result)
+    assert any(link["title"] == "Report/Proceedings" for link in result)
+    assert any(link["title"] == "Agenda" for link in result)
+
+
+def test_board_source_returns_agenda_link(board_spider, attachment_json, calendar_json):
+    attachment_item = attachment_json[1]
+    board_calendar_item = get_calendar_item(calendar_json, board_spider.committee_id)
+
+    meeting_date = attachment_item["meetingDate"][:10]
+    board_spider._links_by_date[meeting_date] = board_spider._parse_attachment_links(
+        attachment_item,
+        marked_agenda_path="MarkedAgenda",
+    )
+
+    links = board_spider._parse_links(board_calendar_item)
+    source = board_spider._parse_source(links)
+
+    assert source == "https://lims.minneapolismn.gov/MarkedAgenda/Council/5914"
+
+
+def test_board_request_attachment_endpoint_uses_endpoint_default(board_spider):
+    request = board_spider._request_attachment_endpoint(0)
+
+    assert request.meta["marked_agenda_path"] == "MarkedAgenda"
