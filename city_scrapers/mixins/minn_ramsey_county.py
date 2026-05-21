@@ -81,7 +81,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
                 title=self.agency,
                 description="",
                 classification=self._parse_classification(),
-                start=self._parse_start(item),
+                start=start,
                 end=None,
                 all_day=False,
                 time_notes="",
@@ -104,13 +104,11 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
                 )
             except ValueError as e:
                 self.logger.warning(f"Error while parsing start time for: {item} - {e}")
-                pass
         if start_date:
             try:
                 return datetime.strptime(start_date, "%m/%d/%Y")
             except ValueError as e:
                 self.logger.warning(f"Error while parsing start time for: {item} - {e}")
-                pass
         self.logger.warning(f"Unable to parse start datetime from item: {item}")
         return None
 
@@ -137,7 +135,10 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
                 return {"name": loc_text, "address": ""}
             match = re.match(r"^(.+?) - (\d+.+)$", loc_text)
             if match:
-                return {"name": match.group(1).strip(), "address": match.group(2).strip()}
+                return {
+                    "name": match.group(1).strip(),
+                    "address": match.group(2).strip(),
+                }
             return {"name": loc_text, "address": self.location["address"]}
         return self.location
 

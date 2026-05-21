@@ -77,9 +77,8 @@ def test_location():
 
 
 def test_parse_location_with_address():
-    item = {
-        "Location": "Heritage Hall - 4200 Otter Lake Road, White Bear Township, MN 55110"
-    }
+    loc = "Heritage Hall - 4200 Otter Lake Road, White Bear Township, MN 55110"
+    item = {"Location": loc}
     assert spider._parse_location(item) == {
         "name": "Heritage Hall",
         "address": "4200 Otter Lake Road, White Bear Township, MN 55110",
