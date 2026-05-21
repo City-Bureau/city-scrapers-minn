@@ -113,8 +113,8 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         return None
 
     def _parse_classification(self):
-        """Derive classification from agency name."""
-        name_lower = self.agency.lower()
+        """Derive classification from dept_name value."""
+        name_lower = self.dept_name.lower()
         if "board" in name_lower or "authority" in name_lower:
             return BOARD
         if "committee" in name_lower:
