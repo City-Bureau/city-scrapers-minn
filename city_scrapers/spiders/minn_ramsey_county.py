@@ -6,7 +6,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyBoardOfCommissionersSpider",
         "name": "minn_ramsey_boc",
-        "agency": "Board of Commissioners",
+        "agency": "Ramsey County Board",
+        "dept_name": "Board of Commissioners",
         "dept_id": "41635",
         "guid": "342EB836-C0D1-463A-8A12-C5C1B8BB0EBF",
     },
@@ -14,7 +15,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyBoardWorkshopSpider",
         "name": "minn_ramsey_bwd",
-        "agency": "Board Workshop / Discussion",
+        "agency": "Ramsey County Board",
+        "dept_name": "Board Workshop / Discussion",
         "dept_id": "44588",
         "guid": "87E5EA0B-060D-423E-B656-A0557147DB5A",
     },
@@ -22,7 +24,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyBudgetCommitteeSpider",
         "name": "minn_ramsey_bcw",
-        "agency": "Budget Committee of the Whole",
+        "agency": "Ramsey County Board",
+        "dept_name": "Budget Committee of the Whole",
         "dept_id": "42189",
         "guid": "98D0D44A-168E-4676-B714-BFED6022EF17",
     },
@@ -30,7 +33,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyHraSpider",
         "name": "minn_ramsey_hra",
-        "agency": "Housing and Redevelopment Authority",
+        "agency": "Ramsey County Board",
+        "dept_name": "Housing and Redevelopment Authority",
         "dept_id": "42188",
         "guid": "CDDF294F-8FC8-4162-AE1C-6309552C4427",
     },
@@ -38,7 +42,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyLegislativeCommitteeSpider",
         "name": "minn_ramsey_lcw",
-        "agency": "Legislative Committee of the Whole",
+        "agency": "Ramsey County Board",
+        "dept_name": "Legislative Committee of the Whole",
         "dept_id": "42190",
         "guid": "AE0EDFEA-0EE4-4FFD-A92A-BD3857E2B442",
     },
@@ -46,7 +51,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyRegionalRailroadSpider",
         "name": "minn_ramsey_rra",
-        "agency": "Regional Railroad Authority",
+        "agency": "Ramsey County Board",
+        "dept_name": "Regional Railroad Authority",
         "dept_id": "42187",
         "guid": "7029D254-4F33-4FE0-B34A-C8AB0ABC3D54",
     },
