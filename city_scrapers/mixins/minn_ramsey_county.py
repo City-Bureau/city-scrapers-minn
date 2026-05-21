@@ -20,7 +20,7 @@ class MinnRamseyCountyMixinMeta(type):
     """
 
     def __init__(cls, name, bases, dct):
-        required_static_vars = ["agency", "name", "dept_id", "guid"]
+        required_static_vars = ["name", "dept_name", "dept_id", "guid"]
         missing_vars = [var for var in required_static_vars if var not in dct]
 
         if missing_vars:
