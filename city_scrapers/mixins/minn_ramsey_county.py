@@ -41,7 +41,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
     }
 
     name = None
-    agency = None
+    dept_name = None
     dept_id = None
     guid = None
 
