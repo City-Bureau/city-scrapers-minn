@@ -78,7 +78,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
             if start and start.year < self.since_year:
                 continue
             meeting = Meeting(
-                title=self.agency,
+                title=self.dept_name,
                 description="",
                 classification=self._parse_classification(),
                 start=start,
