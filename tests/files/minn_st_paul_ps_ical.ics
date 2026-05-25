@@ -1,0 +1,570 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Test//Test//EN
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260106T163000
+DTEND;TZID=America/Chicago:20260106T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260113T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260204T163000
+DTEND;TZID=America/Chicago:20260204T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260210T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20251217T204810Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260303T163000
+DTEND;TZID=America/Chicago:20260303T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260310T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260414T163000
+DTEND;TZID=America/Chicago:20260414T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260414T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20251016T200837Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260505T163000
+DTEND;TZID=America/Chicago:20260505T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260512T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260609T163000
+DTEND;TZID=America/Chicago:20260609T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260609T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260805T163000
+DTEND;TZID=America/Chicago:20260805T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260811T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20260901T163000
+DTEND;TZID=America/Chicago:20260901T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260908T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20261006T163000
+DTEND;TZID=America/Chicago:20261006T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20261013T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20261104T163000
+DTEND;TZID=America/Chicago:20261104T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20261110T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Committee of the Board Meeting
+DTSTART;TZID=America/Chicago:20261201T163000
+DTEND;TZID=America/Chicago:20261201T190000
+DTSTAMP:20260513T121652Z
+UID:7nrg0i7s8lak92s1mdrb2iag1p_R20240213T223000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20261208T163000
+SEQUENCE:3
+CREATED:20200115T155150Z
+LAST-MODIFIED:20250909T155750Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260120T173000
+DTEND;TZID=America/Chicago:20260120T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260120T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260217T173000
+DTEND;TZID=America/Chicago:20260217T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260217T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260317T173000
+DTEND;TZID=America/Chicago:20260317T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260317T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260421T173000
+DTEND;TZID=America/Chicago:20260421T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260421T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260519T173000
+DTEND;TZID=America/Chicago:20260519T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260519T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260623T173000
+DTEND;TZID=America/Chicago:20260623T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260616T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260714T173000
+DTEND;TZID=America/Chicago:20260714T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260721T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260818T173000
+DTEND;TZID=America/Chicago:20260818T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260818T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20260922T173000
+DTEND;TZID=America/Chicago:20260922T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260915T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20261020T173000
+DTEND;TZID=America/Chicago:20261020T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20261020T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20261117T173000
+DTEND;TZID=America/Chicago:20261117T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20261117T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Regular Board of Education Meeting
+DTSTART;TZID=America/Chicago:20261215T173000
+DTEND;TZID=America/Chicago:20261215T210000
+DTSTAMP:20260513T121652Z
+UID:5ki2v4jbcoibl4tae0t077b7qf_R20240220T233000@google.com
+RECURRENCE-ID;TZID=America/Chicago:20261215T173000
+SEQUENCE:3
+CREATED:20200115T155240Z
+LAST-MODIFIED:20251215T172846Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:FY26-27 Budget Engagement Session
+DTSTART;TZID=America/Chicago:20260428T173000
+DTEND;TZID=America/Chicago:20260428T193000
+DTSTAMP:20260513T121652Z
+UID:3ahn0cqtnofho7631qgjlomq7u@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260428T173000
+SEQUENCE:0
+CREATED:20260424T162428Z
+DESCRIPTION:<br><b>INDEPENDENT SCHOOL DISTRICT NO. 625</b><br><b>SAINT PAU
+ L PUBLIC SCHOOLS</b><br><br><u>SPECIAL NOTICE FROM THE BOARDOF EDUCATION</
+ u><br> <br>In the Matter of a Potential Quorum              
+                                 <br>   
+                                      
+                                      
+                              <br><u>_________
+ ___________________________________________________________________</u><br
+ ><u><br></u><br>To:       Directors of the Boardof Education of Inde
+ pendent School<br>            District No. 625<br> <br> <br>
+             PLEASE TAKE NOTICE\,that the undersigned\, pursuant
+  to Minnesota Statutes Section 123B.09\,Subdivision 6\, does hereby notice
+  that a potential of a quorum of directors maybe present at the <b>SY2026-
+ 27 Budget Engagement Session on Tuesday\, April 28\,2026 </b>beginning at 
+ 5:30 p.m. at Como Park Senior High School located at 740Rose Ave. W.<br> 
+ <br>The public is welcome to attend. <br> <br> <br> <br>April 24\, 202
+ 6<br> <br>                               
+                              UriahWard<br>  
+                                      
+                      Chair\,Board of Education<br>  
+                                      
+                      IndependentSchool District No. 62
+ 5<br>                                  
+                           SaintPaul Public School
+ s
+LAST-MODIFIED:20260424T162428Z
+LOCATION:Como Park Senior High\, 740 Rose Ave W\, St Paul\, MN 55117\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Special Meeting for Attorney-Client Privileged Information
+DTSTART;TZID=America/Chicago:20260312T191500
+DTEND;TZID=America/Chicago:20260312T201500
+DTSTAMP:20260513T121652Z
+UID:3m4bbl8759h0n6fnq9isql6qac@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260312T191500
+SEQUENCE:0
+CREATED:20260310T161808Z
+DESCRIPTION:<br>INDEPENDENT SCHOOL DISTRICT NO. 625<br>SAINT PAUL PUBLIC S
+ CHOOLS<br><u><br></u><br><u>SPECIAL NOTICE FROM THE BOARD OF EDUCATION</u>
+ <br><br>In the Matter of Attorney-Client Privileged Information<br><u>____
+ _________________________________________________________________</u><br><
+ br>To: Directors of the Board of Education of Independent School District 
+ No. 625<br><br><br><b>PLEASE TAKE NOTICE</b>\, that the undersigned\, purs
+ uant to Minnesota Statutes Section 123B.09\, Subdivision 6\, does hereby c
+ all a special meeting of the Board of Education of Independent School Dist
+ rict No. 625\, Saint Paul Public Schools\, to be held and convened on <b>
+ Thursday\, March 12\, 2026 in Conference Room 5A of the Administration Bui
+ lding\, located at 360 Colborne Street. </b><br><br><b>The special meetin
+ g shall begin at 7:15 p.m.</b> and during which by majority public vote t
+ he Board shall move into a closed session to consider attorney-client priv
+ ileged matters as is permitted by Minnesota Statutes Section 13D.05\, subd
+ . 3(b) regarding a Confidential Employment Matter\, as is provided for by 
+ Minnesota Statutes Section 13D.05\, subd. 3(b). <br><br><br><br>March 10\
+ , 2026<br><br>Uriah Ward<br>Chair\, Board of Education<br>Independent Scho
+ ol District No. 625 <br>Saint Paul Public Schools
+LAST-MODIFIED:20260310T161808Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Joint Property Tax Advisory Committee Meeting (JPTAC)
+DTSTART;TZID=America/Chicago:20260323T083000
+DTEND;TZID=America/Chicago:20260323T103000
+DTSTAMP:20260513T121652Z
+UID:1gjism0h8oj2hbtmom9g1fu7s7@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260323T083000
+SEQUENCE:0
+CREATED:20250910T212032Z
+LAST-MODIFIED:20250910T212032Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Hidden River Middle School Ribbon Cutting
+DTSTART;TZID=America/Chicago:20260210T160000
+DTEND;TZID=America/Chicago:20260210T170000
+DTSTAMP:20260513T121652Z
+UID:6ockr8fpcbu0mqk5ji8h73tf5n@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260210T160000
+SEQUENCE:0
+CREATED:20260205T222744Z
+DESCRIPTION:<br>INDEPENDENT SCHOOL DISTRICT NO. 625<br>SAINT PAUL PUBLIC S
+ CHOOLS<br><br><br><u>SPECIAL NOTICE FROM THE BOARD OF EDUCATION</u><br><br
+ >In the Matter of a Potential Quorum<br><u>_______________________________
+ _____________________________________________</u><br><br>To: Directors of 
+ the Board of Education of Independent School District No. 625<br><br><br>P
+ LEASE TAKE NOTICE\, that the undersigned\, pursuant to Minnesota Statutes 
+ Section 123B.09\, Subdivision 6\, does hereby notice that a potential of a
+  quorum of directors may be present at an upcoming community event:<ul><li
+ ><b><br>Hidden River Ribbon-Cutting Ceremony on February 10\, 2026 beginni
+ ng at 4:00 p.m. at 1700 Summit Ave.\, St. Paul\, MN 55105</b></li></ul><br
+ >This event is open to the public.  <br><br><br>February 5\, 2026<br><br
+ >Uriah Ward<br>Chair\, Board of Education<br>Independent School District N
+ o. 625 <br>Saint Paul Public Schools
+LAST-MODIFIED:20260205T222745Z
+LOCATION:1700 Summit Ave\, St Paul\, MN
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Special Meeting for Interviews of Selected Candidates for Board Va
+ cancy
+DTSTART;TZID=America/Chicago:20260310T180000
+DTEND;TZID=America/Chicago:20260310T210000
+DTSTAMP:20260513T121652Z
+UID:48v5nroaaa0821p6leao4u53i4@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260310T180000
+SEQUENCE:0
+CREATED:20260220T182651Z
+DESCRIPTION:<br><br>INDEPENDENT SCHOOL DISTRICT NO. 625<br>SAINT PAUL PUBL
+ IC SCHOOLS<br><br><u>SPECIAL NOTICE FROM THE BOARD OF EDUCATION</u><br><u>
+ <br></u><br>In the Matter of Interviews for Board Vacancy     <br><u>__
+ __________________________________________________________________________
+ </u><br><br>To: Directors of the Board of Education of Independent School 
+ District No. 625<br><br><br>PLEASE TAKE NOTICE\, that the undersigned\, pu
+ rsuant to Minnesota Statutes Section 123B.09\, Subdivision 6\, does hereby
+  call a special meeting of the Board of Education of Independent School Di
+ strict No. 625\, Saint Paul Public Schools\, to be held and convened on <
+ b>Tuesday\, March 10\, 2026\, commencing at 6:00 P.M. at the District Admi
+ nistration Building located at 360 Colborne Street\,</b> to conduct inter
+ views of selected applicants for the board vacancy\, after which the Board
+  of Education will make its selection of the applicant to fill the positio
+ n vacated by Jim Vue on February 17\, 2026. <br><br>The Board may then ac
+ t on a Resolution Filling School Board Vacancy by Appointment.<br><br>This
+  meeting is open to the public\, and the meeting will be livestreamed at 
+ <u><a target="_blank" href="https://spps.eduvision.tv/LiveSched.aspx">http
+ s://spps.eduvision.tv/LiveSched.aspx</a></u>.<br><br><br>February 24\, 202
+ 6<br><br>Uriah Ward<br>Chair\, Board of Education<br>Independent School Di
+ strict No. 625<br>Saint Paul Public Schools
+LAST-MODIFIED:20260224T161121Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Special Closed Meeting re: Attorney Client Priviliege
+DTSTART;TZID=America/Chicago:20260120T163000
+DTEND;TZID=America/Chicago:20260120T173000
+DTSTAMP:20260513T121652Z
+UID:6t5jttapfh4emfi96fa74nisid@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260120T163000
+SEQUENCE:1
+CREATED:20260116T172518Z
+DESCRIPTION:<br>INDEPENDENT SCHOOL DISTRICT NO. 625<br>SAINT PAUL PUBLIC S
+ CHOOLS<br><br><u>SPECIAL NOTICE FROM THE BOARD OF EDUCATION</u><br><br>In 
+ the Matter of Attorney-Client Privileged Information<br><u>_______________
+ ______________________________________________________</u><br><br>To: Dire
+ ctors of the Board of Education of Independent School District No. 625<br>
+ <br><br><b>PLEASE TAKE NOTICE</b>\, that the undersigned\, pursuant to Min
+ nesota Statutes Section 123B.09\, Subdivision 6\, does hereby call a speci
+ al meeting of the Board of Education of Independent School District No. 62
+ 5\, Saint Paul Public Schools\, to be held and convened on <b>Tuesday\, J
+ anuary 20\, 2026 in Conference Room 5A of the Administration Building\, lo
+ cated at 360 Colborne Street. </b><br><br><b>The special meeting shall be
+ gin at 4:30 p.m.</b> and during which by majority public vote the Board s
+ hall move into a closed session to consider attorney-client privileged mat
+ ters as is permitted by Minnesota Statutes Section 13D.05\, subd. 3(b) reg
+ arding <i>State of Minnesota\, et. al</i>. vs. Kristi Noem\, et. al.\, U.
+ S. District Court File No. 0:26-cv-00190\, as is provided for by Minnesota
+  Statutes Section 13D.05\, subd. 3(b). <br><br><br><br>January 16\, 2026<
+ br><br>Uriah Ward<br>Chair\, Board of Education<br>Independent School Dist
+ rict No. 625 <br>Saint Paul Public Schools
+LAST-MODIFIED:20260116T172530Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Special Meeting on Non-Renewals
+DTSTART;TZID=America/Chicago:20260609T160000
+DTEND;TZID=America/Chicago:20260609T163000
+DTSTAMP:20260513T121652Z
+UID:1q27a0fqen0a0lo01sneh8jlg7@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260609T160000
+SEQUENCE:0
+CREATED:20250909T155534Z
+LAST-MODIFIED:20250909T155534Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Joint Property Tax Advisory Committee Meeting (JPTAC)
+DTSTART;TZID=America/Chicago:20260126T083000
+DTEND;TZID=America/Chicago:20260126T103000
+DTSTAMP:20260513T121652Z
+UID:0n3irff65kq8j6nj1g0umc5hga@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260126T083000
+SEQUENCE:0
+CREATED:20250910T211901Z
+LAST-MODIFIED:20250910T211901Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Joint Property Tax Advisory Committee Meeting (JPTAC)
+DTSTART;TZID=America/Chicago:20260622T083000
+DTEND;TZID=America/Chicago:20260622T103000
+DTSTAMP:20260513T121652Z
+UID:0arv020nepa09e82qs3k5p8tus@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260622T083000
+SEQUENCE:0
+CREATED:20250910T212053Z
+LAST-MODIFIED:20250910T212053Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Special Meeting on FY27 Budget Work Session
+DTSTART;TZID=America/Chicago:20260207T083000
+DTEND;TZID=America/Chicago:20260207T170000
+DTSTAMP:20260513T121652Z
+UID:1lfbik12rqco3i416lh888fum5@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260207T083000
+SEQUENCE:0
+CREATED:20260202T200732Z
+DESCRIPTION:<br> INDEPENDENT SCHOOL DISTRICT NO. 625<br>SAINT PAUL PUBLIC
+  SCHOOLS<br><br><u>SPECIAL NOTICE FROM THE BOARD OF EDUCATION</u><br><br>I
+ n the Matter of a Workshop Regarding FY27 Budget<br><u>___________________
+ _________________________________________________________</u><br><br>To: D
+ irectors of the Board of Education of Independent School <br>District No.
+  625<br><br><br>PLEASE TAKE NOTICE\, that the undersigned\, pursuant to Mi
+ nnesota Statutes Section 123B.09\, Subdivision 6\, does hereby call a spec
+ ial meeting of the Board of Education of Independent School District No. 6
+ 25\, Saint Paul Public Schools\, to be held and convened on <b>Saturday\,
+  February 7\, 2026\, beginning at 8:30 a.m. and will be held in Conference
+  Room 5A at the Administration Building located at 360 Colborne Street.</b
+ >  <br><br>The purpose of this workshop is for Administration and the Bo
+ ard to:<ul><li><br>Adhere to BOE budget policy</li><li><br>Determine BOE b
+ udget parameters and options</li></ul><br><br>The meeting is open to the p
+ ublic.<br><br>Dated:  February 2\, 2026<br><br>Uriah Ward<br>Chair\, Boar
+ d of Education<br>Independent School District No. 625 <br>Saint Paul Publ
+ ic Schools
+LAST-MODIFIED:20260202T200732Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Annual Meeting
+DTSTART;TZID=America/Chicago:20260106T160000
+DTEND;TZID=America/Chicago:20260106T163000
+DTSTAMP:20260513T121652Z
+UID:1ve6s4p5jj93dob5fpht8kggp1@google.com
+RECURRENCE-ID;TZID=America/Chicago:20260106T160000
+SEQUENCE:0
+CREATED:20250909T155439Z
+LAST-MODIFIED:20250909T155439Z
+LOCATION:360 S Colborne St\, St Paul\, MN 55102\, USA
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
