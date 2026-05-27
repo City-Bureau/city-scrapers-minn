@@ -1,13 +1,20 @@
 from city_scrapers.mixins.minn_ramsey_county import MinnRamseyCountyMixin
 
+"""
+The value of `agency_name` has to match with the scraper's corresponding
+resquest record in the Airtable backlog. This value is used by the 
+'Airtable sync workflow' to link the scraper's PR to the correct request
+record in Airtable.
+"""
+
 # dept_id and guid come from https://ramseycountymn.legistar.com/Departments.aspx
 spider_configs = [
     # Board of Commissioners
     {
         "class_name": "MinnRamseyCountyBoardOfCommissionersSpider",
         "name": "minn_ramsey_boc",
-        "agency": "Ramsey County Board",
-        "dept_name": "Board of Commissioners",
+        "agency": "Ramsey County Board of Commissioners",
+        "agency_name": "Ramsey County Board",
         "dept_id": "41635",
         "guid": "342EB836-C0D1-463A-8A12-C5C1B8BB0EBF",
     },
@@ -15,8 +22,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyBoardWorkshopSpider",
         "name": "minn_ramsey_bwd",
-        "agency": "Ramsey County Board",
-        "dept_name": "Board Workshop / Discussion",
+        "agency": "Ramsey County Board Workshop / Discussion",
+        "agency_name": "Ramsey County Board",
         "dept_id": "44588",
         "guid": "87E5EA0B-060D-423E-B656-A0557147DB5A",
     },
@@ -24,8 +31,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyBudgetCommitteeSpider",
         "name": "minn_ramsey_bcw",
-        "agency": "Ramsey County Board",
-        "dept_name": "Budget Committee of the Whole",
+        "agency": "Ramsey County Budget Committee of the Whole",
+        "agency_name": "Ramsey County Board",
         "dept_id": "42189",
         "guid": "98D0D44A-168E-4676-B714-BFED6022EF17",
     },
@@ -33,8 +40,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyHraSpider",
         "name": "minn_ramsey_hra",
-        "agency": "Ramsey County Board",
-        "dept_name": "Housing and Redevelopment Authority",
+        "agency": "Ramsey County Housing and Redevelopment Authority",
+        "agency_name": "Ramsey County Board",
         "dept_id": "42188",
         "guid": "CDDF294F-8FC8-4162-AE1C-6309552C4427",
     },
@@ -42,8 +49,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyLegislativeCommitteeSpider",
         "name": "minn_ramsey_lcw",
-        "agency": "Ramsey County Board",
-        "dept_name": "Legislative Committee of the Whole",
+        "agency": "Ramsey County Legislative Committee of the Whole",
+        "agency_name": "Ramsey County Board",
         "dept_id": "42190",
         "guid": "AE0EDFEA-0EE4-4FFD-A92A-BD3857E2B442",
     },
@@ -51,8 +58,8 @@ spider_configs = [
     {
         "class_name": "MinnRamseyCountyRegionalRailroadSpider",
         "name": "minn_ramsey_rra",
-        "agency": "Ramsey County Board",
-        "dept_name": "Regional Railroad Authority",
+        "agency": "Ramsey County Regional Railroad Authority",
+        "agency_name": "Ramsey County Board",
         "dept_id": "42187",
         "guid": "7029D254-4F33-4FE0-B34A-C8AB0ABC3D54",
     },
