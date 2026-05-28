@@ -117,7 +117,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         """Return the short department title by stripping the 'Ramsey County ' prefix."""
         prefix = "Ramsey County "
         if self.agency.startswith(prefix):
-            return self.agency[len(prefix):]
+            return self.agency[len(prefix) :]
         return self.agency
 
     def _parse_classification(self):
