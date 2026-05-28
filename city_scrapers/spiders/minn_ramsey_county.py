@@ -2,7 +2,7 @@ from city_scrapers.mixins.minn_ramsey_county import MinnRamseyCountyMixin
 
 """
 The value of `agency_name` has to match with the scraper's corresponding
-resquest record in the Airtable backlog. This value is used by the 
+resquest record in the Airtable backlog. This value is used by the
 'Airtable sync workflow' to link the scraper's PR to the correct request
 record in Airtable.
 """
