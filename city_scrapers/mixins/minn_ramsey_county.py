@@ -20,7 +20,7 @@ class MinnRamseyCountyMixinMeta(type):
     """
 
     def __init__(cls, name, bases, dct):
-        required_static_vars = ["name", "dept_name", "dept_id", "guid"]
+        required_static_vars = ["name", "agency", "agency_name", "dept_id", "guid"]
         missing_vars = [var for var in required_static_vars if var not in dct]
 
         if missing_vars:
@@ -41,7 +41,8 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
     }
 
     name = None
-    dept_name = None
+    agency = None
+    agency_name = None
     dept_id = None
     guid = None
 
@@ -78,7 +79,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
             if start and start.year < self.since_year:
                 continue
             meeting = Meeting(
-                title=self.dept_name,
+                title=self._parse_dept_title(),
                 description="",
                 classification=self._parse_classification(),
                 start=start,
@@ -112,9 +113,16 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         self.logger.warning(f"Unable to parse start datetime from item: {item}")
         return None
 
+    def _parse_dept_title(self):
+        """Return the short department title by stripping the 'Ramsey County ' prefix."""
+        prefix = "Ramsey County "
+        if self.agency.startswith(prefix):
+            return self.agency[len(prefix):]
+        return self.agency
+
     def _parse_classification(self):
-        """Derive classification from dept_name value."""
-        name_lower = self.dept_name.lower()
+        """Derive classification from the short department title."""
+        name_lower = self._parse_dept_title().lower()
         if "board" in name_lower or "authority" in name_lower:
             return BOARD
         if "committee" in name_lower:
