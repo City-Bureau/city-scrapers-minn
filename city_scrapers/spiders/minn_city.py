@@ -33,7 +33,7 @@ spider_configs = [
     {
         "class_name": "MinnBlssdabSpider",
         "name": "minn_blssdab",
-        "agency": "Minneapolis Bloomington-Lake Special Service District Advisory Board",
+        "agency": "Minneapolis Bloomington-Lake Special Service District Advisory Board",  # noqa
         "agency_name": "Minneapolis Planning Commission",
         "committee_id": 151,
         "meeting_type": 2,
@@ -57,7 +57,7 @@ spider_configs = [
     {
         "class_name": "MinnBusinessIhzcSpider",
         "name": "minn_business_ihzc",
-        "agency": "Minneapolis Business, Inspections, Housing & Zoning (BIHZ) Committee",
+        "agency": "Minneapolis Business, Inspections, Housing & Zoning (BIHZ) Committee",  # noqa
         "agency_name": "Minneapolis Planning Commission",
         "committee_id": 220,
         "meeting_type": 1,

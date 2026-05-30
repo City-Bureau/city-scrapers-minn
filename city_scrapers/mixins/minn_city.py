@@ -42,9 +42,24 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     source_url = "https://lims.minneapolismn.gov/Calendar/all/monthly"
     lims_base_url = "https://lims.minneapolismn.gov"
     calendar_path = "Calendar/GetCalenderList"
+
     custom_settings = {
+        "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
+        "DOWNLOAD_HANDLERS": {
+            "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+            "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+        },
+        "PLAYWRIGHT_BROWSER_TYPE": "firefox",
+        "PLAYWRIGHT_LAUNCH_OPTIONS": {
+            "headless": True,
+        },
+        "DOWNLOAD_DELAY": 1,
+        "ROBOTSTXT_OBEY": False,
+        "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0",  # noqa
+        "COOKIES_ENABLED": True,
         "FEED_EXPORT_ENCODING": "utf-8",
     }
+
     attachment_endpoints = [
         {
             "parent_path": "CityCouncil/Meetings",
@@ -125,7 +140,9 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         endpoint = response.meta["endpoint"]
         endpoint_index = response.meta["endpoint_index"]
 
-        verfication_token = response.css("input[name='__RequestVerificationToken']::attr(value)").get()
+        verfication_token = response.css(
+            "input[name='__RequestVerificationToken']::attr(value)"
+        ).get()
 
         formdata = self.attachment_formdata.copy()
 
