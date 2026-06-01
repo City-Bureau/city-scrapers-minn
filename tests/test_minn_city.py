@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from os.path import dirname, join
+from unittest.mock import MagicMock
 
 import pytest
 from city_scrapers_core.constants import BOARD, CITY_COUNCIL, COMMISSION
@@ -87,7 +88,7 @@ class TestMeetingFields:
         item = get_calendar_item(calendar_json, charter_spider.committee_id)
 
         assert charter_spider.name == "minn_char_co"
-        assert charter_spider.agency == "Charter Commission"
+        assert charter_spider.agency == "Minneapolis Charter Commission"
         assert charter_spider.committee_id == 42
         assert charter_spider.meeting_type == 4
 
@@ -106,7 +107,7 @@ class TestMeetingFields:
         item = get_calendar_item(calendar_json, epb_spider.committee_id)
 
         assert epb_spider.name == "minn_epb"
-        assert epb_spider.agency == "Ethical Practices Board"
+        assert epb_spider.agency == "Minneapolis Ethical Practices Board"
         assert epb_spider.committee_id == 53
         assert epb_spider.meeting_type == 4
 
@@ -275,10 +276,22 @@ def test_epb_calendar_item_without_matching_attachment_date_gets_no_links(
     assert result == []
 
 
+def _make_mock_response(spider, endpoint_index):
+    mock = MagicMock()
+    mock.meta = {
+        "endpoint": spider.attachment_endpoints[endpoint_index],
+        "endpoint_index": endpoint_index,
+    }
+    mock.css.return_value.get.return_value = None
+    return mock
+
+
 def test_charter_request_attachment_endpoint_uses_marked_agenda_path_override(
     charter_spider,
 ):
-    request = charter_spider._request_attachment_endpoint(0)
+    request = charter_spider._request_attachment_endpoint(
+        _make_mock_response(charter_spider, 0)
+    )
 
     assert request.meta["marked_agenda_path"] == "MarkedAgenda"
 
@@ -286,7 +299,9 @@ def test_charter_request_attachment_endpoint_uses_marked_agenda_path_override(
 def test_planning_request_attachment_endpoint_uses_endpoint_default(
     planning_spider,
 ):
-    request = planning_spider._request_attachment_endpoint(2)
+    request = planning_spider._request_attachment_endpoint(
+        _make_mock_response(planning_spider, 2)
+    )
 
     assert request.meta["marked_agenda_path"] == "Board/MarkedAgenda"
 
@@ -383,6 +398,8 @@ def test_board_source_returns_agenda_link(board_spider, attachment_json, calenda
 
 
 def test_board_request_attachment_endpoint_uses_endpoint_default(board_spider):
-    request = board_spider._request_attachment_endpoint(0)
+    request = board_spider._request_attachment_endpoint(
+        _make_mock_response(board_spider, 0)
+    )
 
     assert request.meta["marked_agenda_path"] == "MarkedAgenda"
