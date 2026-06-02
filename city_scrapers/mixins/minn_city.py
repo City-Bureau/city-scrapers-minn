@@ -42,19 +42,37 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     source_url = "https://lims.minneapolismn.gov/Calendar/all/monthly"
     lims_base_url = "https://lims.minneapolismn.gov"
     calendar_path = "Calendar/GetCalenderList"
+
     custom_settings = {
+        "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
+        "DOWNLOAD_HANDLERS": {
+            "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+            "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+        },
+        "PLAYWRIGHT_BROWSER_TYPE": "firefox",
+        "PLAYWRIGHT_LAUNCH_OPTIONS": {
+            "headless": True,
+        },
+        "DOWNLOAD_DELAY": 1,
+        "ROBOTSTXT_OBEY": False,
+        "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0",  # noqa
+        "COOKIES_ENABLED": True,
         "FEED_EXPORT_ENCODING": "utf-8",
     }
+
     attachment_endpoints = [
         {
+            "parent_path": "CityCouncil/Meetings",
             "path": "CityCouncil/CityCouncilMeetingsPagedList",
             "marked_agenda_path": "MarkedAgenda",
         },
         {
+            "parent_path": "Boards/Meetings",
             "path": "Jobs/PublicBoardMeetingsPagedList",
             "marked_agenda_path": "Board/MarkedAgenda",
         },
         {
+            "parent_path": "IndependentBodies/IndependentBodiesMeetings",
             "path": "IndependentBodies/IndependentBodiesMeetingsPagedList",
             "marked_agenda_path": "Board/MarkedAgenda",
         },
@@ -102,11 +120,38 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
 
     def start_requests(self):
         self._links_by_date = {}
-        yield self._request_attachment_endpoint(0)
+        yield self._verfication_request(0)
 
-    def _request_attachment_endpoint(self, endpoint_index):
+    def _verfication_request(self, endpoint_index):
         endpoint = self.attachment_endpoints[endpoint_index]
+
+        return scrapy.Request(
+            url=f"{self.lims_base_url}/{endpoint['parent_path']}",
+            method="GET",
+            meta={
+                "playwright": True,
+                "endpoint": endpoint,
+                "endpoint_index": endpoint_index,
+            },
+            callback=self._request_attachment_endpoint,
+        )
+
+    def _request_attachment_endpoint(self, response):
+        endpoint = response.meta["endpoint"]
+        endpoint_index = response.meta["endpoint_index"]
+
+        verfication_token = response.css(
+            "input[name='__RequestVerificationToken']::attr(value)"
+        ).get()
+
         formdata = self.attachment_formdata.copy()
+
+        if not verfication_token:
+            self.logger.warning(
+                f"Verification token not found for {endpoint['path']}. "
+            )
+
+        formdata["__RequestVerificationToken"] = verfication_token
 
         if self.abbreviation:
             formdata["abbreviation"] = self.abbreviation
@@ -151,7 +196,7 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         next_index = response.meta["endpoint_index"] + 1
 
         if next_index < len(self.attachment_endpoints):
-            yield self._request_attachment_endpoint(next_index)
+            yield self._verfication_request(next_index)
         else:
             yield self._request_primary_calendar()
 
