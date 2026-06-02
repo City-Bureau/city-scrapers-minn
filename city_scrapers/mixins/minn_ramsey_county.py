@@ -120,9 +120,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
                         link_el = field.css("a")[0]
                         if "onclick" in link_el.attrib and link_el.attrib[
                             "onclick"
-                        ].startswith(
-                            ("radopen('", "window.open", "OpenTelerikWindow")
-                        ):
+                        ].startswith(("radopen('", "window.open", "OpenTelerikWindow")):
                             url = response.urljoin(
                                 link_el.attrib["onclick"].split("'")[1]
                             )
