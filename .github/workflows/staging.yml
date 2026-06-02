@@ -69,7 +69,7 @@ jobs:
           PIPENV_DEFAULT_PYTHON_VERSION: ${{ env.PYTHON_VERSION }}
 
       - name: Install Playwright browsers
-        run: pipenv run playwright install chromium
+        run: pipenv run playwright install chromium firefox
 
       - name: Run scrapers
         run: |
