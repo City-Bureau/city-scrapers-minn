@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 from datetime import datetime
 
 import scrapy
@@ -20,7 +21,7 @@ class MinnRamseyCountyMixinMeta(type):
     """
 
     def __init__(cls, name, bases, dct):
-        required_static_vars = ["name", "dept_name", "dept_id", "guid"]
+        required_static_vars = ["name", "agency", "agency_name", "dept_id", "guid"]
         missing_vars = [var for var in required_static_vars if var not in dct]
 
         if missing_vars:
@@ -41,7 +42,8 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
     }
 
     name = None
-    dept_name = None
+    agency = None
+    agency_name = None
     dept_id = None
     guid = None
 
@@ -71,6 +73,77 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         """
         yield from self._parse_legistar_events_page(response)
 
+    def _parse_legistar_events_page(self, response):
+        """Override to skip POST-based pagination incompatible with GET cookie approach.
+
+        The base class _parse_next_page decodes response.request.body which is
+        empty on GET requests, causing an error. Since all years are returned on
+        the initial GET via the cookie, pagination is not needed.
+        """
+        legistar_events = self._parse_legistar_events(response)
+        yield from self.parse_legistar(legistar_events)
+
+    def _parse_legistar_events(self, response):
+        """Override to normalize 'Export to Calendar' header to 'iCalendar'.
+
+        Ramsey County Legistar uses 'Export to Calendar' as the column name
+        instead of the empty/ics header the base class expects, so deduplication
+        via _scraped_urls would skip every row without this fix.
+        """
+        events_table = response.css("table.rgMasterTable")[0]
+
+        headers = []
+        for th in events_table.css("th[class^='rgHeader']"):
+            header_text = (
+                " ".join(th.css("*::text").extract()).replace("\xa0", " ").strip()
+            )
+            header_inputs = th.css("input")
+            if header_text:
+                headers.append(header_text)
+            elif header_inputs:
+                headers.append(header_inputs[0].attrib["value"])
+            else:
+                headers.append(th.css("img")[0].attrib["alt"])
+
+        events = []
+        for row in events_table.css("tr.rgRow, tr.rgAltRow"):
+            try:
+                data = defaultdict(lambda: None)
+                for header, field in zip(headers, row.css("td")):
+                    field_text = (
+                        " ".join(field.css("*::text").extract())
+                        .replace("\xa0", " ")
+                        .strip()
+                    )
+                    url = None
+                    if field.css("a"):
+                        link_el = field.css("a")[0]
+                        if "onclick" in link_el.attrib and link_el.attrib[
+                            "onclick"
+                        ].startswith(
+                            ("radopen('", "window.open", "OpenTelerikWindow")
+                        ):
+                            url = response.urljoin(
+                                link_el.attrib["onclick"].split("'")[1]
+                            )
+                        elif "href" in link_el.attrib:
+                            url = response.urljoin(link_el.attrib["href"])
+                    if url and "View.ashx?M=IC" in url:
+                        data["iCalendar"] = {"url": url}
+                    elif url:
+                        data[header] = {"label": field_text, "url": url}
+                    else:
+                        data[header] = field_text
+
+                ical_url = (data.get("iCalendar") or {}).get("url")
+                if ical_url is None or ical_url in self._scraped_urls:
+                    continue
+                self._scraped_urls.add(ical_url)
+                events.append(dict(data))
+            except Exception as e:
+                self.logger.warning(f"Error while parsing Legistar event row: {e}")
+        return events
+
     def parse_legistar(self, events):
         """Parse Meeting items from Legistar event dicts."""
         for item in events:
@@ -78,7 +151,7 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
             if start and start.year < self.since_year:
                 continue
             meeting = Meeting(
-                title=self.dept_name,
+                title=self._parse_dept_title(),
                 description="",
                 classification=self._parse_classification(),
                 start=start,
@@ -112,9 +185,16 @@ class MinnRamseyCountyMixin(LegistarSpider, metaclass=MinnRamseyCountyMixinMeta)
         self.logger.warning(f"Unable to parse start datetime from item: {item}")
         return None
 
+    def _parse_dept_title(self):
+        """Return the short title by stripping the 'Ramsey County ' prefix."""
+        prefix = "Ramsey County "
+        if self.agency.startswith(prefix):
+            return self.agency[len(prefix) :]
+        return self.agency
+
     def _parse_classification(self):
-        """Derive classification from dept_name value."""
-        name_lower = self.dept_name.lower()
+        """Derive classification from the short department title."""
+        name_lower = self._parse_dept_title().lower()
         if "board" in name_lower or "authority" in name_lower:
             return BOARD
         if "committee" in name_lower:
