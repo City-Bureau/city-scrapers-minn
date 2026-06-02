@@ -59,7 +59,11 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
                 return False
             if "/bundles/" in url:
                 return True
-            if "googletagmanager" in url or "google-analytics" in url or "youtube" in url:
+            if (
+                "googletagmanager" in url
+                or "google-analytics" in url
+                or "youtube" in url
+            ):
                 return True
         return False
 
