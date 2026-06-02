@@ -43,6 +43,26 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
     lims_base_url = "https://lims.minneapolismn.gov"
     calendar_path = "Calendar/GetCalenderList"
 
+    def _should_abort_request(request):
+        """
+        Using this function to only allow HTML and XHR requests
+        to be processed by Playwright, and abort all others. This
+        was done to prevent requests to static assets, which was
+        returning 403s.
+        """
+        if request.resource_type in {"image", "stylesheet", "font", "media"}:
+            return True
+        if request.resource_type == "script":
+            url = request.url
+            # Let Cloudflare and analytics scripts run; kill the app bundles.
+            if "cloudflare" in url or "cloudflareinsights" in url or "cdn-cgi" in url:
+                return False
+            if "/bundles/" in url:
+                return True
+            if "googletagmanager" in url or "google-analytics" in url or "youtube" in url:
+                return True
+        return False
+
     custom_settings = {
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
         "DOWNLOAD_HANDLERS": {
@@ -58,6 +78,7 @@ class MinnCityMixin(CityScrapersSpider, metaclass=MinnCityMixinMeta):
         "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0",  # noqa
         "COOKIES_ENABLED": True,
         "FEED_EXPORT_ENCODING": "utf-8",
+        "PLAYWRIGHT_ABORT_REQUEST": _should_abort_request,
     }
 
     attachment_endpoints = [
