@@ -63,7 +63,7 @@ jobs:
 
       - name: Set up playwright
         run: |
-          pipenv run playwright install chromium
+          pipenv run playwright install chromium firefox
 
       - name: Run scrapers
         run: |
