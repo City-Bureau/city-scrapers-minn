@@ -8,7 +8,7 @@ from city_scrapers_core.spiders import LegistarSpider
 
 class MinnHennepinBocSpider(LegistarSpider):
     name = "minn_hennepin_boc"
-    agency = "Hennepin County Board of Commissioners"
+    agency = "Hennepin County"
     timezone = "America/Chicago"
     start_urls = ["https://hennepinmn.legistar.com/Calendar.aspx"]
     custom_settings = {
