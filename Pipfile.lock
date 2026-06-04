@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1bae8b301671231e0b006c8fdc58c61fd2b974a2587c40da774d34c8c81de364"
+            "sha256": "5f066a4d95b575e614ac03df8ea3d363e79cf19dd7cb35a6910e3eecfe02c01d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -935,12 +935,12 @@
         },
         "scrapy": {
             "hashes": [
-                "sha256:c7b8fc8d2c51a39d52f6025bdd7e9c714e43f97afd300e8c44157cf7a05c0c9e",
-                "sha256:ff47379299699f1fcc7bc1d404754306f04371d0822e077c2857777d60743e07"
+                "sha256:4be353d6abbb942a9f7e7614ca8b5f3d9037381176ac8d8859c8cac676e74fa0",
+                "sha256:dfbd565384fc3fffeba121f5a3a2d0899ac1f756d41432ca0879933fbfb3401d"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.10'",
-            "version": "==2.15.2"
+            "markers": "python_version >= '3.8'",
+            "version": "==2.11.2"
         },
         "scrapy-playwright": {
             "hashes": [

@@ -6,13 +6,13 @@ name = "pypi"
 [packages]
 python-dateutil = "*"
 requests = "*"
+scrapy = "==2.11.2"
 scrapy-sentry-errors = "1.0.0"
 city-scrapers-core = {ref = "main", git = "https://github.com/City-Bureau/city-scrapers-core.git", extras = ["azure"]}
 scrapy-wayback-middleware = "*"
 scrapy-playwright = "*"
 icalendar = "*"
 recurring-ical-events = "*"
-scrapy = "==2.11.2"
 
 [dev-packages]
 freezegun = "*"
