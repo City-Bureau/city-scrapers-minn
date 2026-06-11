@@ -1,19 +1,32 @@
-## Summary
+## What's this PR do?
 
-**Issue:** #ISSUE_NUMBER
+<!-- eg. This PR updates the scraper for Cleveland City Council because of changes to how they display their meeting schedule. -->
 
-Replace "ISSUE_NUMBER" with the number of your issue so that GitHub will link this pull request with the issue and make review easier.
+## Why are we doing this?
 
-## Checklist
+<!-- eg. The website's layout was recently updated, causing our existing scraper to fail. This change ensures our scraper remains functional and continues to provide timely updates on council meetings. -->
 
-All checks are run in [GitHub Actions](https://github.com/features/actions). You'll be able to see the results of the checks at the bottom of the pull request page after it's been opened, and you can click on any of the specific checks listed to see the output of each step and debug failures.
+## Steps to manually test
 
-- [ ] Tests are implemented
-- [ ] All tests are passing
-- [ ] Style checks run (see [documentation](https://city-scrapers.org/docs/development/) for more details)
-- [ ] Style checks are passing
-- [ ] Code comments from template removed
+<!-- Text here is not always necessary but it is generally recommended in order to aid a reviewer.
+eg.
+1. Activate the virtual env and enter the pipenv shell:
+```
+pipenv shell
+```
+2. Ensure the project is installed:
+```
+pipenv sync --dev
+```
+3. Run the spider:
+```
+scrapy crawl <spider-name> -O test_output.csv
+```
+4. Monitor the output and ensure no errors are raised.
 
-## Questions
+5. Inspect `test_output.csv` to ensure the data looks valid.
+-->
 
-Include any questions you have about what you're working on.
+## Are there any smells or added technical debt to note?
+
+<!-- eg. The new scraping logic includes a more complex parsing routine, which might be less efficient. Future optimization or a more robust parsing strategy may be needed if the website's layout continues to evolve. -->
