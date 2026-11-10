@@ -2,7 +2,7 @@ name: Staging
 
 on:
   schedule:
-    - cron: "15 5 * * *"
+    - cron: "17 5 * * *"
   push:
     branches:
       - staging
